@@ -2,15 +2,21 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,11 +28,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class GUI extends JFrame implements ActionListener {
+	private static final long serialVersionUID = 1L;
 	private JPanel panelTwo = new JPanel();
 	private JTextField txtMaPhong = new JTextField();
 	private JTextField txtGiaPhong = new JTextField();
@@ -37,6 +45,11 @@ public class GUI extends JFrame implements ActionListener {
 
 	private JComboBox<String> cboChatLuong = new JComboBox<String>();
 	private JComboBox<String> cboLoaiPhong = new JComboBox<String>();
+	private JComboBox<String> cboFilterChatLuong = new JComboBox<String>();
+	private JComboBox<String> cboFilterLoaiPhong = new JComboBox<String>();
+
+	private JComboBox<String> cboFilterTinhTrang = new JComboBox<String>();
+	private JComboBox<String> cboFilterGia = new JComboBox<String>();
 
 	private JLabel lblMaPhong = new JLabel("Mã phòng: ");
 	private JLabel lblLoaiPhong = new JLabel("Loại phòng: ");
@@ -136,9 +149,6 @@ public class GUI extends JFrame implements ActionListener {
 		contentPanel.setBounds(271, 0, 725, 569);
 		getContentPane().add(contentPanel);
 
-		panelTwo.setBounds(0, 0, 725, 569);
-		panelTwo.setBackground(Color.red);
-
 		// Create table
 		createTable();
 
@@ -149,7 +159,7 @@ public class GUI extends JFrame implements ActionListener {
 		contentPanel.setLayout(null);
 
 		JPanel panelOne = new JPanel();
-		panelOne.setBounds(0, 0, 725, 569);
+		panelOne.setBounds(0, 0, 715, 569);
 		panelOne.setLayout(null);
 		JLabel lblPhnMmQun = new JLabel("Phần mềm quản lý khách sạn");
 		lblPhnMmQun.setForeground(new Color(237, 51, 59));
@@ -183,12 +193,17 @@ public class GUI extends JFrame implements ActionListener {
 		lblNhm_1_1_1_1_1.setFont(new Font("Dialog", Font.BOLD, 25));
 		lblNhm_1_1_1_1_1.setBounds(220, 345, 331, 45);
 		panelOne.add(lblNhm_1_1_1_1_1);
+
+		panelOne.setVisible(true);
+
+		panelTwo.setBounds(0, 0, 715, 569);
+		panelTwo.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.add(panelTwo);
 
 		JPanel inputPanel = new JPanel();
 		inputPanel.setBorder(new TitledBorder(null, "Th\u00F4ng tin ph\u00F2ng", TitledBorder.LEADING, TitledBorder.TOP,
 				null, null));
-		inputPanel.setBounds(0, 0, 725, 343);
+		inputPanel.setBounds(0, 0, 715, 284);
 		panelTwo.add(inputPanel);
 		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
 
@@ -197,10 +212,9 @@ public class GUI extends JFrame implements ActionListener {
 		Box b1 = Box.createHorizontalBox();
 		Box b2 = Box.createHorizontalBox();
 		Box b3 = Box.createHorizontalBox();
-		Box b4 = Box.createHorizontalBox();
-		Box b5 = Box.createHorizontalBox();
 		Box b6 = Box.createHorizontalBox();
 		Box b7 = Box.createHorizontalBox();
+		Box b8 = Box.createHorizontalBox();
 		lblMaPhong.setFont(new Font("Dialog", Font.BOLD, 14));
 
 		b1.add(lblMaPhong);
@@ -213,20 +227,19 @@ public class GUI extends JFrame implements ActionListener {
 		b2.add(cboLoaiPhong);
 		lblGiaPhong.setFont(new Font("Dialog", Font.BOLD, 14));
 
+		b2.add(lblChatLuong);
+		cboChatLuong.addItem("Thường");
+		cboChatLuong.addItem("Cao cấp");
+		b2.add(cboChatLuong);
+		lblGhiChu.setFont(new Font("Dialog", Font.BOLD, 14));
+
+		b2.add(lblTinhTrang);
+		b2.add(chkTinhTrang);
+		lblChatLuong.setFont(new Font("Dialog", Font.BOLD, 14));
+
 		b3.add(lblGiaPhong);
 		b3.add(txtGiaPhong);
 		lblTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
-
-		b4.add(lblTinhTrang);
-		b4.add(chkTinhTrang);
-		b4.add(Box.createHorizontalStrut(530));
-		lblChatLuong.setFont(new Font("Dialog", Font.BOLD, 14));
-
-		b5.add(lblChatLuong);
-		cboChatLuong.addItem("Thường");
-		cboChatLuong.addItem("Cao cấp");
-		b5.add(cboChatLuong);
-		lblGhiChu.setFont(new Font("Dialog", Font.BOLD, 14));
 
 		b6.add(lblGhiChu);
 		b6.add(txtGhiChu);
@@ -243,52 +256,91 @@ public class GUI extends JFrame implements ActionListener {
 		b7.add(Box.createHorizontalStrut(10));
 		b7.add(btnTimKiem);
 
+		b8.setBorder(BorderFactory.createTitledBorder("Bộ lọc"));
+		cboFilterLoaiPhong.addItem("Phòng đơn");
+		cboFilterLoaiPhong.addItem("Phòng đôi");
+		cboFilterChatLuong.addItem("Thường");
+		cboFilterChatLuong.addItem("Cao cấp");
+
+		JLabel lblNewLabel = new JLabel("Loại phòng: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		b8.add(lblNewLabel);
+		b8.add(cboFilterChatLuong);
+		b8.add(Box.createHorizontalStrut(10));
+
+		JLabel lblNewLabel_1 = new JLabel("Chất lượng: ");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		b8.add(lblNewLabel_1);
+		b8.add(cboFilterLoaiPhong);
+		b8.add(Box.createHorizontalStrut(10));
+
+		JLabel lblNewLabel_2 = new JLabel("Tình trạng: ");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		b8.add(lblNewLabel_2);
+		cboFilterTinhTrang.setFont(new Font("Tahoma", Font.PLAIN, 15));
+
+		cboFilterTinhTrang.addItem("Trống");
+		cboFilterTinhTrang.addItem("Đã đặt");
+		b8.add(cboFilterTinhTrang);
+		b8.add(Box.createHorizontalStrut(10));
+
+		JLabel lblNewLabel_3 = new JLabel("Giá: ");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		b8.add(lblNewLabel_3);
+		cboFilterGia.setFont(new Font("Tahoma", Font.PLAIN, 15));
+
+		cboFilterGia.addItem("Tăng dần");
+		cboFilterGia.addItem("Giảm dần");
+		b8.add(cboFilterGia);
+
 		b.add(b1);
 		b.add(Box.createVerticalStrut(10));
 		b.add(b2);
 		b.add(Box.createVerticalStrut(10));
 		b.add(b3);
 		b.add(Box.createVerticalStrut(10));
-		b.add(b4);
-		b.add(Box.createVerticalStrut(10));
-		b.add(b5);
-		b.add(Box.createVerticalStrut(10));
 		b.add(b6);
 		b.add(Box.createVerticalStrut(10));
 		b.add(b7);
-		b.add(Box.createVerticalStrut(50));
+		b.add(b8);
+		b.add(Box.createVerticalStrut(20));
 
 		// Set font of labels
-		lblMaPhong.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblGiaPhong.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblChatLuong.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblGhiChu.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblMaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblGiaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblGhiChu.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		// Set font size of text fields
-		txtMaPhong.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtGiaPhong.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtGhiChu.setFont(new Font("Arial", Font.PLAIN, 20));
-		chkTinhTrang.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtMaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		txtGiaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		txtGhiChu.setFont(new Font("Arial", Font.PLAIN, 15));
+		chkTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		// Set font size of combo box
-		cboChatLuong.setFont(new Font("Arial", Font.PLAIN, 20));
-		cboLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 20));
+		cboChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
+		cboLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 15));
+		cboFilterChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
+		cboFilterLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		// Button font size
-		btnThem.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnSua.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnXoa.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnLuu.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnHuy.setFont(new Font("Arial", Font.PLAIN, 15));
-		btnTimKiem.setFont(new Font("Arial", Font.PLAIN, 15));
+		btnThem.setFont(new Font("Arial", Font.BOLD, 15));
+		btnSua.setFont(new Font("Arial", Font.BOLD, 15));
+		btnXoa.setFont(new Font("Arial", Font.BOLD, 15));
+		btnLuu.setFont(new Font("Arial", Font.BOLD, 15));
+		btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
+		btnTimKiem.setFont(new Font("Arial", Font.BOLD, 15));
 
 		inputPanel.add(b);
+		panelTwo.setVisible(false);
+
 		tbl = new JTable(model);
+		tbl.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		JScrollPane tblPane = new JScrollPane(tbl);
 		tblPane.setBorder(BorderFactory.createTitledBorder("Thông tin các phòng"));
-		tblPane.setBounds(0, 340, 725, 229);
+		tblPane.setBounds(0, 285, 715, 284);
 
 		// Set size of columns and rows
 		tbl.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -304,10 +356,15 @@ public class GUI extends JFrame implements ActionListener {
 
 		panelTwo.add(tblPane);
 
-		contentPanel.add(panelThree);
+		// TODO: Table handlers
+		tbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+			}
+		});
 
-		panelOne.setVisible(true);
-		panelTwo.setVisible(false);
+		contentPanel.add(panelThree);
 		panelThree.setVisible(false);
 
 		// Main menu handler
@@ -322,11 +379,13 @@ public class GUI extends JFrame implements ActionListener {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				menuPanelItem1.setBackground(new Color(246, 97, 81));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				menuPanelItem1.setBackground(new Color(36, 41, 49));
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 
@@ -341,11 +400,13 @@ public class GUI extends JFrame implements ActionListener {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				menuPanelItem2.setBackground(new Color(246, 97, 81));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				menuPanelItem2.setBackground(new Color(36, 41, 49));
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 
@@ -360,27 +421,27 @@ public class GUI extends JFrame implements ActionListener {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				menuPanelItem3.setBackground(new Color(246, 97, 81));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				menuPanelItem3.setBackground(new Color(36, 41, 49));
-			}
-		});
-
-		// TODO: Table handlers
-		tbl.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				super.mouseClicked(e);
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 	}
 
+	// Prevent editing on all cells
+	@SuppressWarnings("serial")
 	private void createTable() {
 		String[] tblCols = { "Mã phòng", "Loại phòng", "Giá phòng", "Tình trạng", "Chất lượng", "Ghi chú" };
-		model = new DefaultTableModel(tblCols, 0);
+		model = new DefaultTableModel(tblCols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		// Add data
 		model.addRow(new Object[] { "P001", "Phòng đơn", "1000000", "Trống", "Thường", "Có wifi" });
@@ -399,24 +460,26 @@ public class GUI extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		// Connect to SQL Server
-//		Connection conn = null;
-//
-//		try {
-//			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			conn = DriverManager
-//					.getConnection("jdbc:sqlserver://localhost:1433;databaseName=TestDB;user=sa;password=!Nguyenvu123");
-//
-//			PreparedStatement pstm = conn.prepareStatement("SELECT * FROM Hotels");
-//			ResultSet rs = pstm.executeQuery();
-//
-//			while (rs.next()) {
-//				System.out.println(rs.getString("maPhong") + " | " + rs.getString("loaiPhong") + " | "
-//						+ rs.getDouble("giaPhong") + " | " + rs.getBoolean("tinhTrang") + " | "
-//						+ rs.getString("chatLuong") + " | " + rs.getString("ghiChu"));
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		Connection conn = null;
+
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			conn = DriverManager.getConnection(
+					"jdbc:sqlserver://localhost:1433;databaseName=TestDB;user=sa;password=23112003;encrypt=false");
+
+			System.out.println(conn);
+
+			PreparedStatement pstm = conn.prepareStatement("SELECT * FROM Hotels");
+			ResultSet rs = pstm.executeQuery();
+
+			while (rs.next()) {
+				System.out.println(rs.getString("maPhong") + " | " + rs.getString("loaiPhong") + " | "
+						+ rs.getDouble("giaPhong") + " | " + rs.getBoolean("tinhTrang") + " | "
+						+ rs.getString("chatLuong") + " | " + rs.getString("ghiChu"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// Create GUI
 		GUI g = new GUI();
