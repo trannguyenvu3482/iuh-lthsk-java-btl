@@ -68,6 +68,10 @@ public class Hotel {
 
     @Override
     public String toString() {
-        return super.toString();
+        String s = "";
+        s += getMaPhong() + " | " + getLoaiPhong() + " | " + getGiaPhong() + " | " + isTinhTrang() + " | " + getChatLuong() + " | " + getGhiChu() + " | ";
+        s += "\n";
+
+        return s;
     }
 }
