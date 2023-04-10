@@ -2,8 +2,8 @@ package dao;
 
 import connectDB.ConnectDB;
 import entity.Hotel;
+import entity.Phong;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,18 +11,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hotels_DAO {
-    public Hotels_DAO() {
+public class Phong_DAO {
+    public Phong_DAO() {
     }
 
-    public List<Hotel> getAllHotels() {
-        ArrayList<Hotel> dsPhong = new ArrayList<>();
+    public List<Phong> getAllPhong() {
+        ArrayList<Phong> dsPhong = new ArrayList<>();
 
         try {
             ConnectDB.getInstance();
             Connection con = ConnectDB.getConnection();
 
-            String sql = "SELECT * FROM Hotels";
+            String sql = "SELECT * FROM Phong";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
@@ -34,8 +34,8 @@ public class Hotels_DAO {
                 String chatLuong = rs.getString("chatLuong");
                 String ghiChu = rs.getString("ghiChu");
 
-                Hotel hotel = new Hotel(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
-                dsPhong.add(hotel);
+                Phong phong = new Phong(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
+                dsPhong.add(phong);
             }
 
         } catch (Exception e) {
@@ -51,13 +51,13 @@ public class Hotels_DAO {
         return dsPhong;
     }
 
-    public Hotel getHotelByID(String ID) {
+    public Phong getPhongByID(String ID) {
         ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
-        Hotel h;
+        Phong h;
 
         try {
-            String sql = "SELECT * FROM Hotels WHERE maPhong = ?";
+            String sql = "SELECT * FROM Phong WHERE maPhong = ?";
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1, ID);
             ResultSet rs = stm.executeQuery();
@@ -70,11 +70,10 @@ public class Hotels_DAO {
                 String chatLuong = rs.getString("chatLuong");
                 String ghiChu = rs.getString("ghiChu");
 
-                return new Hotel(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
+                return new Phong(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
             }
         } catch (Exception e) {
             e.printStackTrace();
-
         }
 
         return null;

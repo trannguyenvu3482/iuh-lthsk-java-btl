@@ -31,8 +31,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import connectDB.ConnectDB;
-import dao.Hotels_DAO;
+import dao.Phong_DAO;
 import entity.Hotel;
+import entity.Phong;
 
 public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JPanel panelTwo = new JPanel();
@@ -445,6 +446,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
+
+		btnThem.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnXoa.addActionListener(this);
+		btnLuu.addActionListener(this);
+		btnHuy.addActionListener(this);
+		btnTimKiem.addActionListener(this);
 	}
 
 	// Prevent editing on all cells
@@ -457,15 +465,14 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			}
 		};
 
-		// Add data
-		Hotels_DAO hotels = new Hotels_DAO();
-		List<Hotel> list = hotels.getAllHotels();
-
-		for (Hotel hotel : list) {
-			String tinhTrang = hotel.isTinhTrang() ? "Còn trống" : "Đã thuê";
-			model.addRow(new Object[] { hotel.getMaPhong(), hotel.getLoaiPhong(), hotel.getGiaPhong(), tinhTrang,
-					hotel.getChatLuong(), hotel.getGhiChu() });
-		}
+//		 TODO: Add data
+//		Phong_DAO hotels = new Phong_DAO();
+//		List<Phong> list = hotels.getAllPhong();
+//
+//		for (Phong hotel : list) {
+//			String tinhTrang = hotel.getTinhTrang() ? "Còn trống" : "Đã thuê";
+//			model.addRow(new Object[] { hotel.getMaPhong(), hotel.getLoaiPhong(), hotel.getGiaPhong(), tinhTrang, hotel.getGhiChu() });
+//		}
 
 		panelTwo.setLayout(null);
 	}
@@ -474,5 +481,19 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+
+		if (o.equals(btnThem)) {
+
+		} else if (o.equals(btnSua)) {
+
+		} else if (o.equals(btnXoa)) {
+
+		} else if (o.equals(btnLuu)) {
+
+		} else if (o.equals(btnHuy)) {
+
+		} else if (o.equals(btnTimKiem)) {
+
+		}
 	}
 }
