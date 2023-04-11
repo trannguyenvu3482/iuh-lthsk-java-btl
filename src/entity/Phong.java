@@ -9,7 +9,6 @@ public class Phong {
     private String ghiChu;
 
     public Phong(String maPhong, String maLoai, Boolean tinhTrang, double giaPhong, String ghiChu) throws Exception {
-        System.out.println("Phong: " + maPhong + " " + maLoai + " " + tinhTrang + " " + giaPhong + " " + ghiChu);
 
         setMaPhong(maPhong);
         setMaLoai(maLoai);

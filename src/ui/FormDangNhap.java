@@ -1,5 +1,7 @@
 package ui;
 
+import dao.NhanVien_DAO;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -12,7 +14,10 @@ public class FormDangNhap extends JDialog implements ActionListener {
 	private JTextField txtMaNV;
 	private JPasswordField txtMatKhau;
 	private JButton btnDangNhap;
+
+	private NhanVien_DAO nhanVienDAO = new NhanVien_DAO();
 	public String maNVDangNhap;
+
 
 	public String getMaNVDangNhap() {
 		return maNVDangNhap;
@@ -90,9 +95,13 @@ public class FormDangNhap extends JDialog implements ActionListener {
 
 				dispose();
 			} else {
-				JOptionPane.showMessageDialog(this, "Loi");
-				maNVDangNhap = "";
-				dispose();
+				if (nhanVienDAO.checkLogin(maNV, password)) {
+					maNVDangNhap = maNV;
+
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu");
+				}
 			}
 		}
 	}

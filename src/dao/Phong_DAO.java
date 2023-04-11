@@ -56,12 +56,12 @@ public class Phong_DAO {
 
             if (rs.next()) {
                 String maPhong = rs.getString("maPhong");
-                String loaiPhong = rs.getString("loaiPhong");
+                String maLoai = rs.getString("maLoai");
                 double giaPhong = rs.getDouble("giaPhong");
                 boolean tinhTrang = rs.getBoolean("tinhTrang");
                 String ghiChu = rs.getString("ghiChu");
 
-                return new Phong(maPhong, loaiPhong, tinhTrang, giaPhong, ghiChu);
+                return new Phong(maPhong, maLoai, tinhTrang, giaPhong, ghiChu);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,8 +92,19 @@ public class Phong_DAO {
     }
 
     public boolean deletePhongByID(String ID) {
-        // TODO: Code
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
 
-        return true;
+        try {
+            String sql = "DELETE FROM Phong WHERE maPhong = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, ID);
+            stm.executeUpdate();
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
