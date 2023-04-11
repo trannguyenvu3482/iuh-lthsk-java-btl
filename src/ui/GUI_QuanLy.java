@@ -1,6 +1,7 @@
 package ui;
 
 import connectDB.ConnectDB;
+import dao.LoaiPhong_DAO;
 import dao.Phong_DAO;
 import entity.Phong;
 
@@ -22,6 +23,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 
     private final JTextField txtGhiChu = new JTextField();
 
+    private final JCheckBox chkTinhTrang = new JCheckBox("Còn trống");
 
     private final JComboBox<String> cboChatLuong = new JComboBox<String>();
     private final JComboBox<String> cboLoaiPhong = new JComboBox<String>();
@@ -228,6 +230,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         b2.add(cboChatLuong);
         lblGhiChu.setFont(new Font("Dialog", Font.BOLD, 14));
 
+        b2.add(chkTinhTrang);
 
         lblChatLuong.setFont(new Font("Dialog", Font.BOLD, 14));
 
@@ -319,6 +322,8 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
         btnTimKiem.setFont(new Font("Arial", Font.BOLD, 15));
 
+        chkTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
+
         inputPanel.add(b);
         panelTwo.setVisible(false);
 
@@ -346,12 +351,17 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         tbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                LoaiPhong_DAO loaiPhongDAO = new LoaiPhong_DAO();
                 int row = tbl.getSelectedRow();
 
                 txtMaPhong.setText(tbl.getValueAt(row, 0).toString());
-                cboLoaiPhong.setSelectedItem(tbl.getValueAt(row, 1).toString());
                 txtGiaPhong.setText(tbl.getValueAt(row, 2).toString());
                 txtGhiChu.setText(tbl.getValueAt(row, 4).toString());
+
+                cboLoaiPhong.setSelectedItem(loaiPhongDAO.getLoaiPhongByID(tbl.getValueAt(row, 1).toString()).getTenLoai());
+                chkTinhTrang.setSelected(tbl.getValueAt(row, 3).toString().equalsIgnoreCase("Còn trống"));
+                cboChatLuong.setSelectedItem(loaiPhongDAO.getLoaiPhongByID(tbl.getValueAt(row, 1).toString()).getChatLuong());
+
             }
         });
 
@@ -488,10 +498,19 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
             }
         } else if (o.equals(btnXoa)) {
-            Phong_DAO hotels = new Phong_DAO();
-            hotels.deletePhongByID(txtMaPhong.getText());
-            clearInputs();
-            refreshTable();
+            int row = tbl.getSelectedRow();
+            if(row ==-1)
+                JOptionPane.showMessageDialog(this, "Phải chọn một dòng để xoá");
+            else {
+                if(JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn xoá phòng "+ tbl.getModel().getValueAt(row, 0).toString() +
+                        " không ?","Cảnh Báo",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+                    Phong_DAO hotels = new Phong_DAO();
+                    hotels.deletePhongByID(tbl.getModel().getValueAt(row, 0).toString());
+                    clearInputs();
+                    refreshTable();
+                    JOptionPane.showMessageDialog(this, "Đã xoá thành công");
+                }
+            }
         } else if (o.equals(btnLuu)) {
             // TODO: Code here
         } else if (o.equals(btnHuy)) {
@@ -499,7 +518,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         } else if (o.equals(btnTimKiem)) {
             String inputValue = JOptionPane.showInputDialog(null, "Nhập mã phòng cần tìm: ");
 
-            if (!inputValue.equals("")) {
+            if (inputValue != null && !inputValue.equals("")) {
                 Phong_DAO hotels = new Phong_DAO();
                 Phong p = hotels.getPhongByID(inputValue);
 
