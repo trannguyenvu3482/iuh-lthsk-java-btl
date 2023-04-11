@@ -45,10 +45,9 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JLabel lblGhiChu = new JLabel("Ghi chú: ");
 
 	private final JButton btnThem = new JButton("Thêm");
-	private final JButton btnSua = new JButton("Sửa");
 	private final JButton btnXoa = new JButton("Xóa");
 	private final JButton btnLuu = new JButton("Lưu");
-	private final JButton btnHuy = new JButton("Hủy");
+	private final JButton btnHuy = new JButton("Xóa trắng");
 	private final JButton btnTimKiem = new JButton("Tìm kiếm");
 
 	private final JTable tbl;
@@ -245,8 +244,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		b7.add(btnThem);
 		b7.add(Box.createHorizontalStrut(10));
-		b7.add(btnSua);
-		b7.add(Box.createHorizontalStrut(10));
 		b7.add(btnXoa);
 		b7.add(Box.createHorizontalStrut(10));
 		b7.add(btnLuu);
@@ -321,7 +318,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		// Button font size
 		btnThem.setFont(new Font("Arial", Font.BOLD, 15));
-		btnSua.setFont(new Font("Arial", Font.BOLD, 15));
 		btnXoa.setFont(new Font("Arial", Font.BOLD, 15));
 		btnLuu.setFont(new Font("Arial", Font.BOLD, 15));
 		btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
@@ -354,7 +350,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		tbl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				super.mouseClicked(e);
+				JOptionPane.showMessageDialog(null, "Clicked");
 			}
 		});
 
@@ -426,7 +422,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		});
 
 		btnThem.addActionListener(this);
-		btnSua.addActionListener(this);
 		btnXoa.addActionListener(this);
 		btnLuu.addActionListener(this);
 		btnHuy.addActionListener(this);
@@ -492,9 +487,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
 			}
-		} else if (o.equals(btnSua)) {
-			// TODO: Code here
-
 		} else if (o.equals(btnXoa)) {
 			// TODO: Code here
 
@@ -502,7 +494,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			// TODO: Code here
 
 		} else if (o.equals(btnHuy)) {
-			// TODO: Code here
+			clearInputs();
 
 		} else if (o.equals(btnTimKiem)) {
 			// TODO: Code here

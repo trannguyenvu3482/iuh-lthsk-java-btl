@@ -23,10 +23,11 @@ public class KhachHang {
     }
 
     public void setMaKH(String maKH) throws Exception {
-        if (!maKH.equalsIgnoreCase("")) {
+        if (maKH.matches("KH\\d{3}")) {
             this.maKH = maKH;
-        } else
-            throw new Exception("Mã KH không được rỗng");
+        } else {
+            throw new Exception("Mã KH không hợp lệ");
+        }
     }
 
 
@@ -35,12 +36,12 @@ public class KhachHang {
     }
 
     public void setTenKH(String tenKH) throws Exception {
-        // Kiểm tra tên khách hàng
-        if (tenKH == null || tenKH.trim().length() < 2 || !Character.isUpperCase(tenKH.charAt(0))) {
-            throw new Exception("Tên khách hàng phải có ít nhất 2 ký tự và bắt đầu bằng chữ hoa");
+        if (tenKH == null || !tenKH.matches("([A-Z](.)+){2,}")) {
+            throw new Exception("Tên khách hàng phải chứa ít nhất 2 chữ và viết hoa mỗi chữ cái đầu");
         }
         this.tenKH = tenKH;
     }
+
 
     public LocalDate getNgaySinh() {
         return ngaySinh;
@@ -48,7 +49,7 @@ public class KhachHang {
 
     public void setNgaySinh(LocalDate ngaySinh) throws Exception {
         // Kiểm tra ngày sinh
-        if (ngaySinh == null || ngaySinh.isBefore(LocalDate.now())) {
+        if (ngaySinh == null || ngaySinh.isAfter(LocalDate.now())) {
             throw new Exception("Ngày sinh không hợp lệ");
         }
         this.ngaySinh = ngaySinh;
@@ -60,8 +61,8 @@ public class KhachHang {
 
     public void setSDT(String SDT) throws Exception {
         // Kiểm tra số điện thoại
-        if (SDT == null || Double.parseDouble(SDT) < 0) {
-            throw new Exception("Số điện thoại không hợp lệ");
+        if (SDT == null || !SDT.matches("^0\\d{9}$")) {
+            throw new Exception("SDT phải là chuỗi chứa đúng 10 chữ số và bắt đầu bằng số 0!");
         }
         this.SDT = SDT;
     }

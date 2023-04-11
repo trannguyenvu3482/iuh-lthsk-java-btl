@@ -6,18 +6,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 public class FormDangNhap extends JDialog implements ActionListener {
 	private JTextField txtMaNV;
-	private JTextField txtMatKhau;
+	private JPasswordField txtMatKhau;
 	private JButton btnDangNhap;
 	public String maNVDangNhap;
 
@@ -56,7 +49,8 @@ public class FormDangNhap extends JDialog implements ActionListener {
 		mainPanel.add(txtMaNV);
 		txtMaNV.setColumns(10);
 
-		txtMatKhau = new JTextField();
+		txtMatKhau = new JPasswordField();
+		txtMatKhau.setEchoChar('*');
 		txtMatKhau.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtMatKhau.setColumns(10);
 		txtMatKhau.setBounds(40, 278, 520, 50);

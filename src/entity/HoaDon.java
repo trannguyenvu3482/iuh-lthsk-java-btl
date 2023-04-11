@@ -6,14 +6,14 @@ public class HoaDon {
     private String maHD;
     private String maNV;
     private String maKH;
-    private double tongHD;
+    private double tongTien;
     private LocalDate ngayTaoHD;
 
-    public HoaDon(String maHD, String maNV, String maKH, double tongHD, LocalDate ngayTaoHD) throws Exception {
+    public HoaDon(String maHD, String maNV, String maKH, double tongTien, LocalDate ngayTaoHD) throws Exception {
         this.setMaHD(maHD);
         this.setMaNV(maNV);
         this.setMaKH(maKH);
-        this.setTongHD(tongHD);
+        this.setTongTien(tongTien);
         this.setNgayTaoHD(ngayTaoHD);
     }
 
@@ -22,10 +22,11 @@ public class HoaDon {
     }
 
     public void setMaHD(String maHD) throws Exception {
-        if (!maHD.equalsIgnoreCase("")) {
+        if (maHD.matches("^HD\\d{3}")) {
             this.maHD = maHD;
-        } else
-            throw new Exception("Mã HD không được rỗng");
+        } else {
+            throw new Exception("Mã HD không hợp lệ");
+        }
     }
 
     public String getMaNV() {
@@ -33,30 +34,34 @@ public class HoaDon {
     }
 
     public void setMaNV(String maNV) throws Exception {
-        if (!maNV.equalsIgnoreCase("")) {
+        if (maNV.matches("^NV\\d{3}")) {
             this.maNV = maNV;
-        } else
-            throw new Exception("Mã NV không được rỗng");
+        } else {
+            throw new Exception("Mã NV không hợp lệ");
+        }
     }
+
     public String getMaKH() {
         return maKH;
     }
 
     public void setMaKH(String maKH) throws Exception {
-        if (!maKH.equalsIgnoreCase("")) {
+        if (maKH.matches("^KH\\d{3}")) {
             this.maKH = maKH;
-        } else
-            throw new Exception("Mã KH không được rỗng");
-    }
-    public double getTongHD() {
-        return tongHD;
+        } else {
+            throw new Exception("Mã KH không hợp lệ");
+        }
     }
 
-    public void setTongHD(double tongHD) throws Exception {
-        if (tongHD < 0) {
+    public double getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(double tongTien) throws Exception {
+        if (tongTien < 0) {
             throw new Exception("Tổng hóa đơn không được nhỏ hơn 0");
         }
-        this.tongHD = tongHD;
+        this.tongTien = tongTien;
     }
 
     public LocalDate getNgayTaoHD() {
