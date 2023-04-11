@@ -10,29 +10,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import connectDB.ConnectDB;
 import dao.Phong_DAO;
-import entity.Hotel;
 import entity.Phong;
 
 public class GUI_NhanVien extends JFrame implements ActionListener {
@@ -42,7 +26,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 	private final JTextField txtGhiChu = new JTextField();
 
-	private final JCheckBox chkTinhTrang = new JCheckBox("Đã đặt");
+
 
 	private final JComboBox<String> cboChatLuong = new JComboBox<String>();
 	private final JComboBox<String> cboLoaiPhong = new JComboBox<String>();
@@ -249,8 +233,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b2.add(cboChatLuong);
 		lblGhiChu.setFont(new Font("Dialog", Font.BOLD, 14));
 
-		b2.add(lblTinhTrang);
-		b2.add(chkTinhTrang);
+
 		lblChatLuong.setFont(new Font("Dialog", Font.BOLD, 14));
 
 		b3.add(lblGiaPhong);
@@ -290,10 +273,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b8.add(cboFilterLoaiPhong);
 		b8.add(Box.createHorizontalStrut(10));
 
-		JLabel lblNewLabel_2 = new JLabel("Tình trạng: ");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		b8.add(lblNewLabel_2);
-		cboFilterTinhTrang.setFont(new Font("Tahoma", Font.PLAIN, 15));
 
 		cboFilterTinhTrang.addItem("Trống");
 		cboFilterTinhTrang.addItem("Đã đặt");
@@ -333,7 +312,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtMaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
 		txtGiaPhong.setFont(new Font("Arial", Font.PLAIN, 15));
 		txtGhiChu.setFont(new Font("Arial", Font.PLAIN, 15));
-		chkTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
 		// Set font size of combo box
 		cboChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -457,7 +435,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 	// Prevent editing on all cells
 	private void createTable() {
-		String[] tblCols = { "Mã phòng", "Loại phòng", "Giá phòng", "Tình trạng", "Chất lượng", "Ghi chú" };
+		String[] tblCols = { "Mã phòng", "Mã loại phòng", "Giá phòng", "Tình trạng", "Ghi chú" };
 		model = new DefaultTableModel(tblCols, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -465,16 +443,33 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			}
 		};
 
-//		 TODO: Add data
-//		Phong_DAO hotels = new Phong_DAO();
-//		List<Phong> list = hotels.getAllPhong();
-//
-//		for (Phong hotel : list) {
-//			String tinhTrang = hotel.getTinhTrang() ? "Còn trống" : "Đã thuê";
-//			model.addRow(new Object[] { hotel.getMaPhong(), hotel.getLoaiPhong(), hotel.getGiaPhong(), tinhTrang, hotel.getGhiChu() });
-//		}
+		 // TODO: Add data
+		Phong_DAO hotels = new Phong_DAO();
+		List<Phong> list = hotels.getAllPhong();
+
+		for (Phong p : list) {
+			String tinhTrang = p.getTinhTrang() ?  "Đã thuê": "Còn trống";
+			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), tinhTrang, p.getGhiChu() });
+		}
 
 		panelTwo.setLayout(null);
+	}
+
+	private void refreshTable() {
+		model.setRowCount(0);
+		Phong_DAO hotels = new Phong_DAO();
+		List<Phong> list = hotels.getAllPhong();
+
+		for (Phong p : list) {
+			String tinhTrang = p.getTinhTrang() ?  "Đã thuê": "Còn trống";
+			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), tinhTrang, p.getGhiChu() });
+		}
+	}
+
+	private void clearInputs() {
+		txtMaPhong.setText("");
+		txtGiaPhong.setText("");
+		txtGhiChu.setText("");
 	}
 
 	// TODO: Button handlers
@@ -483,16 +478,34 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		Object o = e.getSource();
 
 		if (o.equals(btnThem)) {
+			try {
+				Phong_DAO hotels = new Phong_DAO();
 
+
+				Phong p = new Phong(txtMaPhong.getText(), "L001", false, Double.parseDouble(txtGiaPhong.getText()),
+						txtGhiChu.getText());
+
+				hotels.addPhong(p);
+				clearInputs();
+				JOptionPane.showMessageDialog(null, "Thêm thành công");
+				refreshTable();
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
+			}
 		} else if (o.equals(btnSua)) {
+			// TODO: Code here
 
 		} else if (o.equals(btnXoa)) {
+			// TODO: Code here
 
 		} else if (o.equals(btnLuu)) {
+			// TODO: Code here
 
 		} else if (o.equals(btnHuy)) {
+			// TODO: Code here
 
 		} else if (o.equals(btnTimKiem)) {
+			// TODO: Code here
 
 		}
 	}

@@ -3,14 +3,16 @@ package entity;
 public class Phong {
 
     private String maPhong;
-    private String loaiPhong;
-    private String ghiChu;
+    private String maLoai;
     private Boolean tinhTrang;
     private double giaPhong;
+    private String ghiChu;
 
-    public Phong(String maPhong, String loaiPhong, String ghiChu, Boolean tinhTrang, double giaPhong) throws Exception {
+    public Phong(String maPhong, String maLoai, Boolean tinhTrang, double giaPhong, String ghiChu) throws Exception {
+        System.out.println("Phong: " + maPhong + " " + maLoai + " " + tinhTrang + " " + giaPhong + " " + ghiChu);
+
         setMaPhong(maPhong);
-        setLoaiPhong(loaiPhong);
+        setMaLoai(maLoai);
         setGhiChu(ghiChu);
         setTinhTrang(tinhTrang);
         setGiaPhong(giaPhong);
@@ -26,13 +28,13 @@ public class Phong {
         } else throw new Exception("Mã phòng phải có dạng Pxxx (x là số từ 0-9)");
     }
 
-    public String getLoaiPhong() {
-        return loaiPhong;
+    public String getMaLoai() {
+        return maLoai;
     }
 
-    public void setLoaiPhong(String loaiPhong) throws Exception {
-        if (!(loaiPhong.trim().equals(""))) {
-            this.loaiPhong = loaiPhong;
+    public void setMaLoai(String maLoai) throws Exception {
+        if (!(maLoai.trim().equals(""))) {
+            this.maLoai = maLoai;
         } else throw new Exception("Loại phòng không được rỗng");
     }
 
@@ -40,10 +42,8 @@ public class Phong {
         return ghiChu;
     }
 
-    public void setGhiChu(String ghiChu) throws Exception {
-        if (!(ghiChu.trim().equals(""))) {
-            this.ghiChu = ghiChu;
-        } else throw new Exception("Ghi chú không được rỗng");
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
     }
 
     public Boolean getTinhTrang() {
@@ -58,11 +58,10 @@ public class Phong {
         return giaPhong;
     }
 
-    public void setGiaPhong(double giaPhong) {
-        if (giaPhong < 0) {
-            this.giaPhong = 0;
-        } else
+    public void setGiaPhong(double giaPhong) throws Exception {
+        if (giaPhong >= 0) {
             this.giaPhong = giaPhong;
+        } else throw new Exception("Giá phòng phải lớn hơn 0");
     }
 
 }

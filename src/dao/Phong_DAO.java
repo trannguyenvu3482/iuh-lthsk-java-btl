@@ -1,7 +1,6 @@
 package dao;
 
 import connectDB.ConnectDB;
-import entity.Hotel;
 import entity.Phong;
 
 import java.sql.Connection;
@@ -28,24 +27,17 @@ public class Phong_DAO {
 
             while (rs.next()) {
                 String maPhong = rs.getString("maPhong");
-                String loaiPhong = rs.getString("loaiPhong");
-                double giaPhong = rs.getDouble("giaPhong");
+                String maLoai = rs.getString("maLoai");
                 boolean tinhTrang = rs.getBoolean("tinhTrang");
-                String chatLuong = rs.getString("chatLuong");
+                double giaPhong = rs.getDouble("giaPhong");
                 String ghiChu = rs.getString("ghiChu");
 
-                Phong phong = new Phong(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
+                Phong phong = new Phong(maPhong, maLoai, tinhTrang, giaPhong, ghiChu);
                 dsPhong.add(phong);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                ConnectDB.getInstance().disconnect();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         return dsPhong;
@@ -67,15 +59,41 @@ public class Phong_DAO {
                 String loaiPhong = rs.getString("loaiPhong");
                 double giaPhong = rs.getDouble("giaPhong");
                 boolean tinhTrang = rs.getBoolean("tinhTrang");
-                String chatLuong = rs.getString("chatLuong");
                 String ghiChu = rs.getString("ghiChu");
 
-                return new Phong(maPhong, loaiPhong, giaPhong, tinhTrang, chatLuong, ghiChu);
+                return new Phong(maPhong, loaiPhong, tinhTrang, giaPhong, ghiChu);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public void addPhong(Phong p) throws Exception {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+
+        String sql = "INSERT INTO Phong VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setString(1, p.getMaPhong());
+        stm.setString(2, p.getMaLoai());
+        stm.setDouble(3, p.getGiaPhong());
+        stm.setBoolean(4, p.getTinhTrang());
+        stm.setString(5, p.getGhiChu());
+
+        stm.executeUpdate();
+    }
+
+    public boolean editPhongByID(String ID) {
+        // TODO: Code here
+
+        return true;
+    }
+
+    public boolean deletePhongByID(String ID) {
+        // TODO: Code
+
+        return true;
     }
 }
