@@ -462,8 +462,11 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 
 	private void clearInputs() {
 		txtMaNV.setText("");
+		txtMatKhau.setText("");
 		txtHoTen.setText("");
 		txtNgaySinh.setText("");
+		txtSDT.setText("");
+		txtCCCD.setText("");
 	}
 
 	// TODO: Button handlers
@@ -498,19 +501,32 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 				}
 			}
 		} else if (o.equals(btnXoa)) {
-
+			int row = tbl.getSelectedRow();
+			if (row == -1)
+				JOptionPane.showMessageDialog(this, "Phải chọn một dòng để xoá");
+			else {
+				if (JOptionPane.showConfirmDialog(this,
+						"Bạn có chắc chắn xoá nhân viên " + tbl.getModel().getValueAt(row, 0).toString() + " không ?",
+						"Cảnh Báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					NhanVien_DAO nvDAO = new NhanVien_DAO();
+					nvDAO.deletePhongByID(tbl.getModel().getValueAt(row, 0).toString());
+					clearInputs();
+					refreshTable();
+					JOptionPane.showMessageDialog(this, "Đã xoá thành công");
+				}
+			}
 		} else if (o.equals(btnLuu)) {
 			// TODO: Code here
 		} else if (o.equals(btnHuy)) {
 			clearInputs();
 		} else if (o.equals(btnTimKiem)) {
-			String inputValue = JOptionPane.showInputDialog(null, "Nhập mã phòng cần tìm: ");
+			String inputValue = JOptionPane.showInputDialog(null, "Nhập mã nhân viên cần tìm: ");
 
 			if (inputValue != null && !inputValue.equals("")) {
-				Phong_DAO hotels = new Phong_DAO();
-				Phong p = hotels.getPhongByID(inputValue);
+				NhanVien_DAO nvDAO = new NhanVien_DAO();
+				NhanVien nv = nvDAO.getNhanVienByID(inputValue);
 
-				if (p != null) {
+				if (nv != null) {
 					for (int i = 0; i < tbl.getRowCount(); i++) {
 						if (tbl.getValueAt(i, 0).toString().equalsIgnoreCase(inputValue)) {
 							tbl.setRowSelectionInterval(i, i);
@@ -518,10 +534,10 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 						}
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Không tìm thấy phòng");
+					JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên");
 				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Mã phòng không được để trống");
+				JOptionPane.showMessageDialog(null, "Mã nhân viên không được để trống");
 			}
 		}
 	}
