@@ -59,13 +59,13 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         setResizable(false);
 
         // Connect to SQL Server
-        try {
-            ConnectDB.getInstance().connect();
-
-            System.out.println("Connect success");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ConnectDB.getInstance().connect();
+//
+//            System.out.println("Connect success");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         getContentPane().setLayout(null);
 
@@ -484,26 +484,14 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         Object o = e.getSource();
 
         if (o.equals(btnThem)) {
-            try {
-                Phong_DAO hotels = new Phong_DAO();
 
-                Phong p = new Phong(txtMaPhong.getText(), "L001", false, Double.parseDouble(txtGiaPhong.getText()),
-                        txtGhiChu.getText());
-
-                hotels.addPhong(p);
-                clearInputs();
-                JOptionPane.showMessageDialog(null, "Thêm thành công");
-                refreshTable();
-            } catch (Exception e2) {
-                JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
-            }
         } else if (o.equals(btnXoa)) {
             int row = tbl.getSelectedRow();
-            if(row ==-1)
+            if (row == -1)
                 JOptionPane.showMessageDialog(this, "Phải chọn một dòng để xoá");
             else {
-                if(JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn xoá phòng "+ tbl.getModel().getValueAt(row, 0).toString() +
-                        " không ?","Cảnh Báo",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+                if (JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn xoá phòng " + tbl.getModel().getValueAt(row, 0).toString() +
+                        " không ?", "Cảnh Báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                     Phong_DAO hotels = new Phong_DAO();
                     hotels.deletePhongByID(tbl.getModel().getValueAt(row, 0).toString());
                     clearInputs();
@@ -524,7 +512,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 
                 if (p != null) {
                     for (int i = 0; i < tbl.getRowCount(); i++) {
-                        if (tbl.getValueAt(i, 0).equals(inputValue)) {
+                        if (tbl.getValueAt(i, 0).toString().equalsIgnoreCase(inputValue)) {
                             tbl.setRowSelectionInterval(i, i);
                             break;
                         }

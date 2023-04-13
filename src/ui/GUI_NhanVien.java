@@ -60,13 +60,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         setResizable(false);
 
         // Connect to SQL Server
-        try {
-            ConnectDB.getInstance().connect();
-
-            System.out.println("Connect success");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ConnectDB.getInstance().connect();
+//
+//            System.out.println("Connect success");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         getContentPane().setLayout(null);
 
@@ -139,7 +139,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         menuPanelItem3.add(lblThngKCc);
 
 
-        JLabel lblNhm = new JLabel("Welcome, Nhân viên" );
+        JLabel lblNhm = new JLabel("Welcome, Nhân viên");
         lblNhm.setFont(new Font("Dialog", Font.BOLD, 20));
         lblNhm.setBounds(12, 439, 259, 28);
         menuPanel.add(lblNhm);
@@ -485,10 +485,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Thêm thành công");
                 refreshTable();
             } catch (Exception e2) {
-                JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
+                if (e2.getMessage().startsWith("For input string: ")) {
+                    JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
+                }
             }
         } else if (o.equals(btnXoa)) {
-            // TODO: Code here
 
         } else if (o.equals(btnLuu)) {
             // TODO: Code here

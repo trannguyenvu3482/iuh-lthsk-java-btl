@@ -62,6 +62,8 @@ public class Phong_DAO {
                 String ghiChu = rs.getString("ghiChu");
 
                 return new Phong(maPhong, maLoai, tinhTrang, giaPhong, ghiChu);
+            } else {
+                return null;
             }
         } catch (Exception e) {
             e.printStackTrace();

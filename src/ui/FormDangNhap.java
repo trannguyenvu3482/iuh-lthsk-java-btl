@@ -74,7 +74,7 @@ public class FormDangNhap extends JDialog implements ActionListener {
 		mainPanel.add(lblMatKhau);
 
 		btnDangNhap = new JButton("Đăng nhập");
-		btnDangNhap.setFont(new Font("Dialog", Font.BOLD, 20));
+		btnDangNhap.setFont(new Font("Dialog", Font.BOLD, 30));
 		btnDangNhap.setBounds(40, 364, 520, 87);
 		mainPanel.add(btnDangNhap);
 

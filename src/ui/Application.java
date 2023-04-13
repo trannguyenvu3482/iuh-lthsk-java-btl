@@ -1,11 +1,21 @@
 package ui;
 
+import connectDB.ConnectDB;
+
 import javax.swing.JOptionPane;
 
 public class Application {
 	public static String currentLoggedInUser = "";
 
 	public static void main(String[] args) {
+		try {
+			ConnectDB.getInstance().connect();
+
+			System.out.println("Connect success");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		FormDangNhap f = new FormDangNhap();
 		GUI_NhanVien g = new GUI_NhanVien();
 		GUI_QuanLy h = new GUI_QuanLy();
