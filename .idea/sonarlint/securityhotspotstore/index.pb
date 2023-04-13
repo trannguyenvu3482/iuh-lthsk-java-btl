@@ -4,8 +4,6 @@
 :
 
 .classpath,3/5/354079a72b91a4280407c16a36f47d1986fd85a5
-H
-src/entity/NhanVien.java,e/e/ee735206659a872bf7683d37f597c65fe9ca4dd0
 G
 src/dao/HoaDon_DAO.java,8/e/8e2729aaf1a07c0c9af74ecbdfde33ecba4d3aa5
 L
@@ -17,8 +15,6 @@ I
 src/entity/KhachHang.java,f/1/f1d644ef3abbb59d4b74359705e7d0dfe22d8cd5
 F
 src/entity/HoaDon.java,4/9/4938860597c5f8dfa4e9214185c1bc89ddf6545f
-I
-src/dao/NhanVien_DAO.java,4/a/4a606b8ef8a568b93982f695b9f2455cb7200b49
 E
 src/entity/Phong.java,5/a/5a3067f957392c8138db257d278ea9e43382ca62
 I
@@ -27,3 +23,7 @@ J
 src/dao/LoaiPhong_DAO.java,4/d/4d5ad89af53de23060d2715ecc0a6071608a39ea
 J
 src/dao/KhachHang_DAO.java,0/a/0a95f73df5c1b5f1c6667c01cad1b80b34d4470f
+G
+src/ui/Application.java,6/2/62b70c836cfb8e26159edd364a6254fac283fffb
+H
+src/ui/FormDangNhap.java,a/9/a92d8ac548564bb05ee7818be051e8096ee2c7bf
