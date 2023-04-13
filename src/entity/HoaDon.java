@@ -4,14 +4,17 @@ import java.time.LocalDate;
 
 public class HoaDon {
     private String maHD;
+
+    private String maPhong;
     private String maNV;
     private String maKH;
     private double tongTien;
     private LocalDate ngayTaoHD;
 
-    public HoaDon(String maHD, String maNV, String maKH, double tongTien, LocalDate ngayTaoHD) throws Exception {
+    public HoaDon(String maHD, String maPhong, String maNV, String maKH, double tongTien, LocalDate ngayTaoHD) throws Exception {
         this.setMaHD(maHD);
         this.setMaNV(maNV);
+        this.setMaPhong(maPhong);
         this.setMaKH(maKH);
         this.setTongTien(tongTien);
         this.setNgayTaoHD(ngayTaoHD);
@@ -38,6 +41,18 @@ public class HoaDon {
             this.maNV = maNV;
         } else {
             throw new Exception("Mã NV không hợp lệ");
+        }
+    }
+
+    public String getMaPhong() {
+        return maPhong;
+    }
+
+    public void setMaPhong(String maPhong) throws Exception {
+        if (maPhong.matches("^P\\d{3}")) {
+            this.maPhong = maPhong;
+        } else {
+            throw new Exception("Mã phòng không hợp lệ");
         }
     }
 

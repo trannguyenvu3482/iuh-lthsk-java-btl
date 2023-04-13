@@ -47,7 +47,7 @@ public class NhanVien {
 	}
 
 	public void setTenNV(String tenNV) throws Exception {
-		if (tenNV.matches("[A-Z].+( [A-Z].+)")) {
+		if (tenNV.matches("([A-Z](.)+){2,}")) {
 			this.tenNV = tenNV;
 		} else
 			throw new Exception("Tên nhân viên phải có ít nhất 2 từ, mỗi từ bắt đầu bằng chữ hoa");

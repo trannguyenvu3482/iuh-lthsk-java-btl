@@ -49,6 +49,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
     private final JButton btnTimKiem = new JButton("Tìm kiếm");
 
     private final JButton btnClearBoLoc = new JButton("Xóa bộ lọc");
+
+    private final JButton btnInHoaDon = new JButton("In hóa đơn");
     private JTable tbl;
     private DefaultTableModel model;
 
@@ -253,6 +255,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         b7.add(btnTimKiem);
         b7.add(Box.createHorizontalStrut(10));
         b7.add(btnClearBoLoc);
+        b7.add(Box.createHorizontalStrut(10));
+        b7.add(btnInHoaDon);
 
         b8.setBorder(BorderFactory.createTitledBorder("Bộ lọc"));
         cboFilterLoaiPhong.addItem("Phòng đơn");
@@ -323,6 +327,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         btnLuu.setFont(new Font("Arial", Font.BOLD, 15));
         btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
         btnTimKiem.setFont(new Font("Arial", Font.BOLD, 15));
+        btnClearBoLoc.setFont(new Font("Arial", Font.BOLD, 15));
+        btnInHoaDon.setFont(new Font("Arial", Font.BOLD, 15));
 
         inputPanel.add(b);
         panelTwo.setVisible(false);
@@ -344,6 +350,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         // Set font size of table
         tbl.setFont(new Font("Arial", Font.PLAIN, 20));
 
+        btnInHoaDon.setVisible(false);
         panelTwo.add(tblPane);
 
         // TODO: Table handlers
@@ -356,6 +363,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
                 cboLoaiPhong.setSelectedItem(tbl.getValueAt(row, 1).toString());
                 txtGiaPhong.setText(tbl.getValueAt(row, 2).toString());
                 txtGhiChu.setText(tbl.getValueAt(row, 4).toString());
+
+                btnInHoaDon.setVisible(true);
             }
         });
 
@@ -432,6 +441,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         btnHuy.addActionListener(this);
         btnTimKiem.addActionListener(this);
         btnClearBoLoc.addActionListener(this);
+        btnInHoaDon.addActionListener(this);
 
         // Filter handler
         cboFilterLoaiPhong.addActionListener(this);
@@ -601,6 +611,15 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
             cboFilterGia.setSelectedIndex(0);
             rowSorter.setRowFilter(null);
             rowSorter.setSortKeys(null);
+        } else if (o.equals(btnInHoaDon)) {
+            int row = tbl.getSelectedRow();
+
+            if (row != -1) {
+                FormInHoaDon form = new FormInHoaDon(model.getValueAt(row, 0).toString());
+                form.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Chọn một phòng để in hóa đơn");
+            }
         }
     }
 }
