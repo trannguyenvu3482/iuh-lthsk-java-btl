@@ -439,7 +439,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		for (NhanVien p : list) {
-			model.addRow(new Object[] { p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh()),
+			model.addRow(new Object[] { p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh().plusDays(2)),
 					p.getSdt(), p.getCCCD() });
 		}
 
@@ -455,7 +455,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 		for (NhanVien p : list) {
-			model.addRow(new Object[] { p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh()),
+			model.addRow(new Object[] { p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh().plusDays(2)),
 					p.getSdt(), p.getCCCD() });
 		}
 	}
@@ -475,6 +475,11 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 			try {
 				NhanVien_DAO nvDAO = new NhanVien_DAO();
 
+				if (!txtNgaySinh.getText().matches("\\d{2}/\\d{2}/\\d{4}")) {
+					JOptionPane.showMessageDialog(null, "Lỗi: Ngày sinh không hợp lệ");
+					return;
+				}
+
 				NhanVien nv = new NhanVien(txtMaNV.getText(), txtMatKhau.getText(), txtHoTen.getText(),
 						LocalDate.parse(txtNgaySinh.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
 						txtSDT.getText(), txtCCCD.getText());
@@ -484,6 +489,8 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Thêm thành công");
 				refreshTable();
 			} catch (Exception e2) {
+				System.out.println(e.getClass().getName());
+
 				if (e2.getMessage().startsWith("For input string: ")) {
 					JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
 				} else {
