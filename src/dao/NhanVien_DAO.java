@@ -117,6 +117,27 @@ public class NhanVien_DAO {
         statement.executeUpdate();
     }
 
+    public boolean editNhanVienByID(String ID, NhanVien nv) {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        try {
+            String sql = "UPDATE NhanVien SET matKhau = ?, hoTenNV = ?, ngaySinh = ?, SDT = ?, CCCD = ? WHERE maNV = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, nv.getMatKhau());
+            stm.setString(2, nv.getTenNV());
+            stm.setDate(3, java.sql.Date.valueOf(nv.getNgaySinh()));
+            stm.setString(4, nv.getSdt());
+            stm.setString(5, nv.getCCCD());
+            stm.setString(6, ID);
+
+            stm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
     public void deletePhongByID(String ID) {
         ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();

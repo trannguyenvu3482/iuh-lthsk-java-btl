@@ -521,8 +521,27 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				}
 			}
 		} else if (o.equals(btnLuu)) {
-			// TODO: Code here
+			Phong_DAO hotels = new Phong_DAO();
+			int row = tbl.getSelectedRow();
+			if (row != -1) {
+				try {
+					Phong p = new Phong(txtMaPhong.getText(), "L001", false, Double.parseDouble(txtGiaPhong.getText()),
+							txtGhiChu.getText());
 
+					hotels.editPhongByID(model.getValueAt(row, 0).toString(), p);
+					clearInputs();
+					JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+					refreshTable();
+				} catch (Exception e2) {
+					if (e2.getMessage().startsWith("For input string: ")) {
+						JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
+					} else {
+						JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Chọn một phòng để cập nhật");
+			}
 		} else if (o.equals(btnHuy)) {
 			clearInputs();
 

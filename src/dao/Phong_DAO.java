@@ -87,8 +87,21 @@ public class Phong_DAO {
         stm.executeUpdate();
     }
 
-    public boolean editPhongByID(String ID) {
-        // TODO: Code here
+    public boolean editPhongByID(String ID, Phong p) {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        try {
+            String sql = "UPDATE Phong SET maLoai = ?, giaPhong = ?, tinhTrang = ?, ghiChu = ? WHERE maPhong = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, p.getMaLoai());
+            stm.setDouble(2, p.getGiaPhong());
+            stm.setBoolean(3, p.getTinhTrang());
+            stm.setString(4, p.getGhiChu());
+            stm.setString(5, ID);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return true;
     }
