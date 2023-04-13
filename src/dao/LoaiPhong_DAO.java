@@ -66,4 +66,27 @@ public class LoaiPhong_DAO {
 
         return null;
     }
+
+    public String getMaFromLoai(String loaiPhong, String chatLuong) {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        LoaiPhong h;
+
+        try {
+            String sql = "SELECT maLoai FROM LoaiPhong WHERE tenLoai = ? AND chatLuong = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, loaiPhong);
+            stm.setString(2, chatLuong);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                String maLoai = rs.getString("maLoai");
+                return maLoai;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

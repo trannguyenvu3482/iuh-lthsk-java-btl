@@ -17,8 +17,6 @@ E
 src/entity/Phong.java,5/a/5a3067f957392c8138db257d278ea9e43382ca62
 I
 src/entity/LoaiPhong.java,3/7/378aaea842ebc31e9ed5b5171a0fbc9c4da6d754
-J
-src/dao/LoaiPhong_DAO.java,4/d/4d5ad89af53de23060d2715ecc0a6071608a39ea
 G
 src/ui/Application.java,6/2/62b70c836cfb8e26159edd364a6254fac283fffb
 H
