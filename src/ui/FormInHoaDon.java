@@ -1,6 +1,7 @@
 package ui;
 
 import dao.HoaDon_DAO;
+import dao.KhachHang_DAO;
 import dao.LoaiPhong_DAO;
 import dao.Phong_DAO;
 import entity.HoaDon;
@@ -20,7 +21,6 @@ import javax.swing.*;
 
 public class FormInHoaDon extends JDialog implements ActionListener {
     private String idPhong;
-
     private String maNV;
     private JTextField txtMaKH;
     private JTextField txtHoTenKH;
@@ -29,7 +29,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
     private JTextField txtCCCD;
     private JButton btnInHoaDon = new JButton("In hóa đơn");
 
-    public FormInHoaDon(String idPhong) {
+    public FormInHoaDon(String idPhong, String maNV) {
         this.setTitle("In hóa đơn cho phòng " + idPhong);
         this.setModal(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -37,6 +37,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
         this.setLocationRelativeTo(null);
 
         this.idPhong = idPhong;
+        this.maNV = maNV;
         getContentPane().setLayout(null);
 
         JPanel mainPanel = new JPanel();
@@ -135,23 +136,23 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 
     public void writeFileHoaDon() {
         try {
-        	File file = new File("./src/txt/HoaDon" + idPhong + ".txt");
-        	FileWriter fw = new FileWriter(file);
+            HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
+            int countHoaDon = hoaDonDAO.countHoaDon();
+            String maHD = "";
 
-			if (file.exists()) {
-                HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
+            if (countHoaDon == 0) {
+                maHD = "HD001";
+            } else {
+                maHD = "HD" + String.format("%03d", countHoaDon + 1);
+            }
+
+            File file = new File("./src/txt/HoaDon" + maHD + ".txt");
+            FileWriter fw = new FileWriter(file);
+
+            if (file.exists()) {
                 Phong_DAO phongDAO = new Phong_DAO();
                 LoaiPhong_DAO loaiPhongDAO = new LoaiPhong_DAO();
-                int countHoaDon = hoaDonDAO.countHoaDon();
-                String maHD = "";
-
-                if (countHoaDon == 0) {
-                    maHD = "HD001";
-                } else {
-                    maHD = "HD" + String.format("%03d", countHoaDon + 1);
-                }
-
-                System.out.print(maHD);
+                KhachHang_DAO khachHangDAO = new KhachHang_DAO();
 
                 String maKH = txtMaKH.getText();
                 String hoTenKH = txtHoTenKH.getText();
@@ -164,8 +165,9 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 
                 KhachHang k = new KhachHang(maKH, hoTenKH, LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")), sdt, cccd);
 
-                HoaDon hd = new HoaDon(maHD, idPhong, "NV001", maKH, p.getGiaPhong(), LocalDate.now());
+                HoaDon hd = new HoaDon(maHD, idPhong, maNV, maKH, p.getGiaPhong(), LocalDate.now());
 
+                khachHangDAO.addKhachHang(k);
                 hoaDonDAO.addNewHoaDon(hd);
 
 
@@ -204,7 +206,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 
                 fw.write("Chất lượng: " + chatLuong);
                 fw.write("\n");
-                
+
                 fw.write("Giá phòng: " + hd.getTongTien());
                 fw.write("\n");
 

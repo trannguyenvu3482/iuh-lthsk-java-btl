@@ -36,7 +36,7 @@ public class KhachHang {
     }
 
     public void setTenKH(String tenKH) throws Exception {
-        if (tenKH == null || !tenKH.matches("([A-Z](.)+){2,}")) {
+        if (tenKH == null || !tenKH.matches("^[\\p{Lu}][\\p{L}]+([\\s][\\p{Lu}][\\p{L}]+){1,}$")) {
             throw new Exception("Tên khách hàng phải chứa ít nhất 2 chữ và viết hoa mỗi chữ cái đầu");
         }
         this.tenKH = tenKH;

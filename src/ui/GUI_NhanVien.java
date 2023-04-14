@@ -23,45 +23,40 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
     private final JPanel panelTwo = new JPanel();
     private final JTextField txtMaPhong = new JTextField();
     private final JTextField txtGiaPhong = new JTextField();
-
     private final JTextField txtGhiChu = new JTextField();
-
     private final JComboBox<String> cboChatLuong = new JComboBox<String>();
     private final JComboBox<String> cboLoaiPhong = new JComboBox<String>();
     private final JComboBox<String> cboFilterChatLuong = new JComboBox<String>();
     private final JComboBox<String> cboFilterLoaiPhong = new JComboBox<String>();
-
     private final JComboBox<String> cboFilterTinhTrang = new JComboBox<String>();
     private final JComboBox<String> cboFilterGia = new JComboBox<String>();
-
     private final JLabel lblMaPhong = new JLabel("Mã phòng: ");
     private final JLabel lblLoaiPhong = new JLabel("Loại phòng: ");
     private final JLabel lblGiaPhong = new JLabel("Giá phòng: ");
     private final JLabel lblTinhTrang = new JLabel("Tình trạng: ");
     private final JLabel lblChatLuong = new JLabel("Chất lượng: ");
-
     private final JLabel lblGhiChu = new JLabel("Ghi chú: ");
-
     private final JButton btnThem = new JButton("Thêm");
     private final JButton btnXoa = new JButton("Xóa");
     private final JButton btnLuu = new JButton("Lưu");
     private final JButton btnHuy = new JButton("Xóa trắng");
     private final JButton btnTimKiem = new JButton("Tìm kiếm");
-
     private final JButton btnClearBoLoc = new JButton("Xóa bộ lọc");
-
     private final JButton btnInHoaDon = new JButton("In hóa đơn");
+    private String currentMaNV = "";
     private JTable tbl;
     private DefaultTableModel model;
 
     private TableRowSorter<DefaultTableModel> rowSorter;
 
-    public GUI_NhanVien() {
+    public GUI_NhanVien(String maNV) {
         setTitle("Phần mềm quản lý khách sạn - Nhóm 2");
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+
+        this.currentMaNV = maNV;
 
         // Connect to SQL Server
 //        try {
@@ -142,7 +137,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
         lblThngKCc.setFont(new Font("Dialog", Font.BOLD, 20));
         menuPanelItem3.add(lblThngKCc);
 
-        JLabel lblNhm = new JLabel("Welcome, Nhân viên");
+        JLabel lblNhm = new JLabel("Welcome, " + currentMaNV);
         lblNhm.setFont(new Font("Dialog", Font.BOLD, 20));
         lblNhm.setBounds(12, 439, 259, 28);
         menuPanel.add(lblNhm);
@@ -613,10 +608,26 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
             rowSorter.setSortKeys(null);
         } else if (o.equals(btnInHoaDon)) {
             int row = tbl.getSelectedRow();
+            Phong_DAO hotels = new Phong_DAO();
 
             if (row != -1) {
-                FormInHoaDon form = new FormInHoaDon(model.getValueAt(row, 0).toString());
+                FormInHoaDon form = new FormInHoaDon(model.getValueAt(row, 0).toString(), currentMaNV);
                 form.setVisible(true);
+
+                if (!form.isActive()) {
+                    // Set lại trạng thái phòng
+                    try {
+                        hotels.editPhongByID(model.getValueAt(row, 0).toString(),
+                                new Phong(model.getValueAt(row, 0).toString(), model.getValueAt(row, 1).toString(),
+                                        true, Double.parseDouble(model.getValueAt(row, 2).toString()),
+                                        model.getValueAt(row, 4).toString()));
+
+
+                        refreshTable();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
+                    }
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Chọn một phòng để in hóa đơn");
             }
