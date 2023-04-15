@@ -500,6 +500,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
             try {
                 Phong_DAO hotels = new Phong_DAO();
 
+                if (hotels.getPhongByID(txtMaPhong.getText().trim()) != null) {
+                    throw new Exception("Mã phòng đã tồn tại");
+                }
+
+                if (!txtGiaPhong.getText().matches("\\d+(\\.\\d+)?"))
+                    throw new Exception("Giá phòng phải là số");
+
                 Phong p = new Phong(txtMaPhong.getText(), "L001", false, Double.parseDouble(txtGiaPhong.getText()),
                         txtGhiChu.getText());
 
@@ -508,11 +515,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Thêm thành công");
                 refreshTable();
             } catch (Exception e2) {
-                if (e2.getMessage().startsWith("For input string: ")) {
-                    JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
-                }
+                JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
             }
         } else if (o.equals(btnXoa)) {
             int row = tbl.getSelectedRow();
@@ -537,6 +540,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
                 try {
                     String maLoai = loaiPhongDAO.getMaFromLoai(cboLoaiPhong.getSelectedItem().toString(), cboChatLuong.getSelectedItem().toString());
 
+                    if (hotels.getPhongByID(txtMaPhong.getText().trim()) != null) {
+                        throw new Exception("Mã loại phòng đã tồn tại");
+                    }
+
+                    if (!txtGiaPhong.getText().matches("\\d+(\\.\\d+)?"))
+                        throw new Exception("Giá phòng phải là số");
+
                     Phong p = new Phong(txtMaPhong.getText(), maLoai, false, Double.parseDouble(txtGiaPhong.getText()),
                             txtGhiChu.getText());
 
@@ -545,11 +555,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Cập nhật thành công");
                     refreshTable();
                 } catch (Exception e2) {
-                    if (e2.getMessage().startsWith("For input string: ")) {
-                        JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
-                    }
+                    JOptionPane.showMessageDialog(null, "Lỗi: " + e2.getMessage());
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Chọn một phòng để cập nhật");

@@ -38,6 +38,59 @@ public List<KhachHang> getAllKhachHang() throws Exception{
         return dsKhachHang;
 }
 
+    public KhachHang getKhachHangByID(String ID) throws Exception {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setString(1, ID);
+        ResultSet rs = stm.executeQuery();
+
+        if (rs.next()) {
+            String maKH = rs.getString("maKH");
+            String tenKH = rs.getString("hoTenKH");
+            LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
+            String SDT = rs.getString("SDT");
+            String CCCD = rs.getString("CCCD");
+
+            return new KhachHang(maKH, tenKH, ngaySinh, SDT, CCCD);
+        }
+
+        return null;
+    }
+
+    public KhachHang getKhachHangByCCCD(String CCCD) throws Exception {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        String sql = "SELECT * FROM KhachHang WHERE CCCD = ?";
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setString(1, CCCD);
+        ResultSet rs = stm.executeQuery();
+
+        if (rs.next()) {
+            String maKH = rs.getString("maKH");
+            String tenKH = rs.getString("hoTenKH");
+            LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
+            String SDT = rs.getString("SDT");
+            String CCCD1 = rs.getString("CCCD");
+
+            return new KhachHang(maKH, tenKH, ngaySinh, SDT, CCCD1);
+        }
+
+        return null;
+    }
+
+    public boolean checkKhachHangByID(String ID) throws Exception {
+        ConnectDB.getInstance();
+        Connection conn = ConnectDB.getConnection();
+        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setString(1, ID);
+        ResultSet rs = stm.executeQuery();
+
+        return rs.next();
+    }
+
     public void addKhachHang(KhachHang kh) throws Exception {
         ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
