@@ -80,6 +80,24 @@ public class FormDangNhap extends JDialog implements ActionListener {
 
 		btnDangNhap.addActionListener(this);
 
+		// Add key listener for enter key
+		txtMaNV.addKeyListener(new java.awt.event.KeyAdapter() {
+			@Override
+			public void keyPressed(java.awt.event.KeyEvent evt) {
+				if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+					btnDangNhap.doClick();
+				}
+			}
+		});
+
+		txtMatKhau.addKeyListener(new java.awt.event.KeyAdapter() {
+			@Override
+			public void keyPressed(java.awt.event.KeyEvent evt) {
+				if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+					btnDangNhap.doClick();
+				}
+			}
+		});
 	}
 
 	@Override

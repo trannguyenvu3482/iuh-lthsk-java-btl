@@ -286,9 +286,11 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 				LoaiPhong_DAO loaiPhongDAO = new LoaiPhong_DAO();
 				KhachHang_DAO khachHangDAO = new KhachHang_DAO();
 
-				String loaiPhong = loaiPhongDAO.getLoaiPhongByID(p.getMaLoai()).getTenLoai();
-				String chatLuong = loaiPhongDAO.getLoaiPhongByID(p.getMaLoai()).getChatLuong();
+				String maLoai = p.getMaLoai();
+				System.out.println(maLoai);
 
+				String loaiPhong = loaiPhongDAO.getLoaiPhongByID(maLoai).getTenLoai();
+				String chatLuong = loaiPhongDAO.getLoaiPhongByID(maLoai).getChatLuong();
 
 				HoaDon hd = new HoaDon(maHD, idPhong, maNV, k.getMaKH(), p.getGiaPhong(), LocalDate.now());
 
@@ -368,16 +370,18 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 			String cccd = txtCCCD.getText();
 
 			try {
-				writeFileHoaDon(new KhachHang(maKH, hoTenKH,
-						LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")), sdt, cccd), phongDAO.getPhongByID(idPhong));
+				writeFileHoaDon(
+						new KhachHang(maKH, hoTenKH,
+								LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")), sdt, cccd),
+						phongDAO.getPhongByID(idPhong));
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage());
 			}
 		} else if (o == btnKiemTraKhachHang) {
-            KhachHang_DAO khachHangDAO = new KhachHang_DAO();
-            String CCCD = txtCCCD_1.getText();
-            try {
-                KhachHang k = khachHangDAO.getKhachHangByCCCD(CCCD);
+			KhachHang_DAO khachHangDAO = new KhachHang_DAO();
+			String CCCD = txtCCCD_1.getText();
+			try {
+				KhachHang k = khachHangDAO.getKhachHangByCCCD(CCCD);
 
 				if (k != null) {
 					txtMaKH_2.setText(k.getMaKH());
@@ -391,15 +395,16 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 					txtSDT_2.setText("");
 					JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng");
 				}
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, e1.getMessage());
-            }
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage());
+			}
 		} else if (o == btnInHoaDon_2) {
 			try {
 				if (currentMaKH == null) {
 					throw new Exception("Chưa kiểm tra khách hàng");
 				} else {
-					writeFileHoaDon(new KhachHang_DAO().getKhachHangByID(currentMaKH), new Phong_DAO().getPhongByID(idPhong));
+					writeFileHoaDon(new KhachHang_DAO().getKhachHangByID(currentMaKH),
+							new Phong_DAO().getPhongByID(idPhong));
 				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage());

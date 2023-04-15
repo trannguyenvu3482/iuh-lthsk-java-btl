@@ -44,7 +44,6 @@ public class LoaiPhong_DAO {
     public LoaiPhong getLoaiPhongByID(String ID) {
         ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
-        LoaiPhong h;
 
         try {
             String sql = "SELECT * FROM LoaiPhong WHERE maLoai = ?";
@@ -57,8 +56,9 @@ public class LoaiPhong_DAO {
                 String tenLoai = rs.getString("tenLoai");
                 String chatLuong = rs.getString("chatLuong");
 
-                h = new LoaiPhong(maLoai, tenLoai, chatLuong);
-                return h;
+                System.out.print(maLoai + " " + tenLoai + " " + chatLuong);
+
+                return new LoaiPhong(maLoai, tenLoai, chatLuong);
             }
         } catch (Exception e) {
             e.printStackTrace();
