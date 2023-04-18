@@ -8,8 +8,6 @@ L
 src/connectDB/ConnectDB.java,8/4/848d75c56c43a9b71570cec4a58c2d55608da153
 I
 src/dao/NhanVien_DAO.java,4/a/4a606b8ef8a568b93982f695b9f2455cb7200b49
-F
-src/ui/GUI_QuanLy.java,e/c/ec02ed6d4971b5f1bcc7109ab8b91e2f8fa1feaa
 G
 src/dao/HoaDon_DAO.java,8/e/8e2729aaf1a07c0c9af74ecbdfde33ecba4d3aa5
 F
@@ -39,3 +37,11 @@ G
 .project,f/8/f8b41ce76d7b80d2b47e91b5f92c15f00eccf187
 =
 BaiTapLon.iml,a/d/ad52e5407ed8c92b8ee64f45e772e701392fbf69
+G
+src/txt/HoaDonHD013.txt,6/d/6d847f3d0ea2e4651da0d25bd5aac0cc93820987
+H
+src/ui/FormDangNhap.java,a/9/a92d8ac548564bb05ee7818be051e8096ee2c7bf
+J
+src/dao/LoaiPhong_DAO.java,4/d/4d5ad89af53de23060d2715ecc0a6071608a39ea
+I
+src/entity/LoaiPhong.java,3/7/378aaea842ebc31e9ed5b5171a0fbc9c4da6d754

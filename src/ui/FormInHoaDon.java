@@ -267,6 +267,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 		btnInHoaDon_2.addActionListener(this);
 	}
 
+	@SuppressWarnings("resource")
 	public void writeFileHoaDon(KhachHang k, Phong p) {
 		try {
 			HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
@@ -354,6 +355,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
+		} finally {
 		}
 	}
 

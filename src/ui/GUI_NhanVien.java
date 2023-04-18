@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -38,10 +41,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import dao.LoaiPhong_DAO;
+import dao.NhanVien_DAO;
 import dao.Phong_DAO;
+import entity.NhanVien;
 import entity.Phong;
 
 public class GUI_NhanVien extends JFrame implements ActionListener {
+	private boolean isPasswordShown = false;
 	private final JPanel panelTwo = new JPanel();
 	private final JTextField txtMaPhong = new JTextField();
 	private final JTextField txtGiaPhong = new JTextField();
@@ -66,11 +72,23 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JButton btnTimKiem = new JButton("Tìm kiếm");
 	private final JButton btnClearBoLoc = new JButton("Xóa bộ lọc");
 	private final JButton btnInHoaDon = new JButton("In hóa đơn");
+	private final JButton btnXacNhan_1 = new JButton("Xác nhận");
+	private final JButton btnShow = new JButton("");
 	private String currentMaNV = "";
 	private JTable tbl;
 	private DefaultTableModel model;
 
 	private TableRowSorter<DefaultTableModel> rowSorter;
+	private JTextField txtMaNV_2;
+	private JTextField txtSDT_2;
+	private JTextField txtMaNV_1;
+	private JPasswordField txtMatKhau;
+	private JPasswordField txtMatKhauConfirm;
+	private JTextField txtCCCD;
+	private JPasswordField txtMatKhau_2;
+	private JTextField txtNgaySinh_2;
+	private JTextField txtHoTen_2;
+	private JPasswordField txtMatKhauOld;
 
 	public GUI_NhanVien(String maNV) {
 		setTitle("Phần mềm quản lý khách sạn - Nhóm 2");
@@ -80,15 +98,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		setResizable(false);
 
 		this.currentMaNV = maNV;
-
-		// Connect to SQL Server
-//        try {
-//            ConnectDB.getInstance().connect();
-//
-//            System.out.println("Connect success");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
 		getContentPane().setLayout(null);
 
@@ -153,8 +162,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		menuPanel.add(menuPanelItem3);
 		menuPanelItem3.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblThngKCc = new JLabel("Thống kê các phòng");
-		lblThngKCc.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/chart-icon.png")));
+		JLabel lblThngKCc = new JLabel("Chỉnh sửa thông tin");
+		lblThngKCc.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/account-cog-custom.png")));
 		lblThngKCc.setForeground(new Color(255, 255, 255));
 		lblThngKCc.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThngKCc.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -174,8 +183,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		JPanel panelThree = new JPanel();
 		panelThree.setBounds(0, 0, 725, 569);
-		panelThree.setBackground(Color.yellow);
-		panelThree.add(new JLabel("Panel three"));
+		panelThree.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.setLayout(null);
 
 		tbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -214,7 +222,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		});
 
 		JPanel panelOne = new JPanel();
-		panelOne.setBounds(0, 0, 715, 569);
+		panelOne.setBounds(0, 0, 725, 569);
 		panelOne.setLayout(null);
 		JLabel lblPhnMmQun = new JLabel("Phần mềm quản lý khách sạn");
 		lblPhnMmQun.setForeground(new Color(237, 51, 59));
@@ -253,7 +261,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		lblTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
-		panelTwo.setBounds(0, 0, 715, 569);
+		panelTwo.setBounds(0, 0, 725, 569);
 		panelTwo.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.add(panelTwo);
 
@@ -416,6 +424,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		btnTimKiem.addActionListener(this);
 		btnClearBoLoc.addActionListener(this);
 		btnInHoaDon.addActionListener(this);
+		btnShow.addActionListener(this);
+		btnXacNhan_1.addActionListener(this);
 
 		// Filter handler
 		cboFilterLoaiPhong.addActionListener(this);
@@ -424,6 +434,200 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		cboFilterGia.addActionListener(this);
 
 		contentPanel.add(panelThree);
+		panelThree.setLayout(new BoxLayout(panelThree, BoxLayout.Y_AXIS));
+
+		Box b10_1 = Box.createVerticalBox();
+		b10_1.setBorder(new TitledBorder(null, "Ch\u1EC9nh s\u1EEDa th\u00F4ng tin", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+		panelThree.add(b10_1);
+
+		Box b11_1 = Box.createHorizontalBox();
+		b10_1.add(b11_1);
+
+		JLabel lblMaNV_1 = new JLabel("Mã nhân viên: ");
+		lblMaNV_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b11_1.add(lblMaNV_1);
+
+		Component horizontalStrut_2_1_1_2 = Box.createHorizontalStrut(52);
+		b11_1.add(horizontalStrut_2_1_1_2);
+
+		txtMaNV_1 = new JTextField();
+		txtMaNV_1.setText(currentMaNV);
+		txtMaNV_1.setEditable(false);
+		txtMaNV_1.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMaNV_1.setColumns(10);
+		b11_1.add(txtMaNV_1);
+
+		Component verticalStrut_1 = Box.createVerticalStrut(20);
+		b10_1.add(verticalStrut_1);
+
+		Box b12_1_1 = Box.createHorizontalBox();
+		b10_1.add(b12_1_1);
+
+		JLabel lblMatKhauCu = new JLabel("Mật khẩu cũ: ");
+		lblMatKhauCu.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_1_1.add(lblMatKhauCu);
+
+		Component horizontalStrut_2_1_1_1_1_1 = Box.createHorizontalStrut(64);
+		b12_1_1.add(horizontalStrut_2_1_1_1_1_1);
+
+		txtMatKhauOld = new JPasswordField();
+		txtMatKhauOld.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMatKhauOld.setColumns(20);
+		b12_1_1.add(txtMatKhauOld);
+
+		Component verticalStrut_1_2 = Box.createVerticalStrut(20);
+		b10_1.add(verticalStrut_1_2);
+
+		Box b12_1 = Box.createHorizontalBox();
+		b10_1.add(b12_1);
+
+		JLabel lblNewLabel_4_1_1 = new JLabel("Mật khẩu mới: ");
+		lblNewLabel_4_1_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_1.add(lblNewLabel_4_1_1);
+
+		Component horizontalStrut_2_1_1_1_1 = Box.createHorizontalStrut(48);
+		b12_1.add(horizontalStrut_2_1_1_1_1);
+
+		txtMatKhau = new JPasswordField();
+		txtMatKhau.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMatKhau.setColumns(20);
+		b12_1.add(txtMatKhau);
+
+		Component verticalStrut_1_1 = Box.createVerticalStrut(20);
+		b10_1.add(verticalStrut_1_1);
+
+		Box b13_1 = Box.createHorizontalBox();
+		b10_1.add(b13_1);
+
+		JLabel lblMatKhauConfirm_1 = new JLabel("Xác nhận mật khẩu:");
+		lblMatKhauConfirm_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b13_1.add(lblMatKhauConfirm_1);
+
+		txtMatKhauConfirm = new JPasswordField();
+		txtMatKhauConfirm.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMatKhauConfirm.setColumns(20);
+		b13_1.add(txtMatKhauConfirm);
+
+		Component verticalStrut_1_1_1 = Box.createVerticalStrut(15);
+		b10_1.add(verticalStrut_1_1_1);
+
+		Box b14_1 = Box.createHorizontalBox();
+		b10_1.add(b14_1);
+
+		btnXacNhan_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b14_1.add(btnXacNhan_1);
+
+		Component verticalStrut = Box.createVerticalStrut(15);
+		panelThree.add(verticalStrut);
+
+		Box b10_2 = Box.createVerticalBox();
+		b10_2.setBorder(new TitledBorder(null, "Th\u00F4ng tin nh\u00E2n vi\u00EAn", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+		panelThree.add(b10_2);
+
+		Box b11 = Box.createHorizontalBox();
+		b10_2.add(b11);
+
+		JLabel lblMaNV = new JLabel("Mã nhân viên: ");
+		lblMaNV.setFont(new Font("Dialog", Font.BOLD, 20));
+		b11.add(lblMaNV);
+
+		Component horizontalStrut_2_1_1 = Box.createHorizontalStrut(90);
+		b11.add(horizontalStrut_2_1_1);
+
+		txtMaNV_2 = new JTextField();
+		txtMaNV_2.setEditable(false);
+		txtMaNV_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMaNV_2.setColumns(10);
+		b11.add(txtMaNV_2);
+
+		Box b12_2_1 = Box.createHorizontalBox();
+		b10_2.add(b12_2_1);
+
+		JLabel lblNewLabel_4_1_2_1 = new JLabel("Mật khẩu: ");
+		lblNewLabel_4_1_2_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_2_1.add(lblNewLabel_4_1_2_1);
+
+		Component horizontalStrut_2_1_1_1_2_1 = Box.createHorizontalStrut(130);
+		b12_2_1.add(horizontalStrut_2_1_1_1_2_1);
+
+		txtMatKhau_2 = new JPasswordField();
+		txtMatKhau_2.setEditable(false);
+		txtMatKhau_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtMatKhau_2.setColumns(20);
+		b12_2_1.add(txtMatKhau_2);
+
+		Component horizontalStrut_2_1_1_3 = Box.createHorizontalStrut(20);
+		b12_2_1.add(horizontalStrut_2_1_1_3);
+
+		btnShow.setPreferredSize(new Dimension(40, 30));
+		btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-custom.png")));
+		b12_2_1.add(btnShow);
+
+		Box b12_2_1_1_1 = Box.createHorizontalBox();
+		b10_2.add(b12_2_1_1_1);
+
+		JLabel lblNewLabel_4_1_2_1_1_1 = new JLabel("Họ tên:");
+		lblNewLabel_4_1_2_1_1_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_2_1_1_1.add(lblNewLabel_4_1_2_1_1_1);
+
+		Component horizontalStrut_2_1_1_1_2_1_1_1 = Box.createHorizontalStrut(164);
+		b12_2_1_1_1.add(horizontalStrut_2_1_1_1_2_1_1_1);
+
+		txtHoTen_2 = new JTextField();
+		txtHoTen_2.setEditable(false);
+		txtHoTen_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtHoTen_2.setColumns(20);
+		b12_2_1_1_1.add(txtHoTen_2);
+
+		Box b12_2_1_1 = Box.createHorizontalBox();
+		b10_2.add(b12_2_1_1);
+
+		JLabel lblNewLabel_4_1_2_1_1 = new JLabel("Ngày sinh:");
+		lblNewLabel_4_1_2_1_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_2_1_1.add(lblNewLabel_4_1_2_1_1);
+
+		Component horizontalStrut_2_1_1_1_2_1_1 = Box.createHorizontalStrut(130);
+		b12_2_1_1.add(horizontalStrut_2_1_1_1_2_1_1);
+
+		txtNgaySinh_2 = new JTextField();
+		txtNgaySinh_2.setEditable(false);
+		txtNgaySinh_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtNgaySinh_2.setColumns(20);
+		b12_2_1_1.add(txtNgaySinh_2);
+
+		Box b12 = Box.createHorizontalBox();
+		b10_2.add(b12);
+
+		JLabel lblNewLabel_4_1 = new JLabel("Số điện thoại:");
+		lblNewLabel_4_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12.add(lblNewLabel_4_1);
+
+		Component horizontalStrut_2_1_1_1 = Box.createHorizontalStrut(100);
+		b12.add(horizontalStrut_2_1_1_1);
+
+		txtSDT_2 = new JTextField();
+		txtSDT_2.setEditable(false);
+		txtSDT_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtSDT_2.setColumns(20);
+		b12.add(txtSDT_2);
+
+		Box b12_2 = Box.createHorizontalBox();
+		b10_2.add(b12_2);
+
+		JLabel lblNewLabel_4_1_2 = new JLabel("CCCD:");
+		lblNewLabel_4_1_2.setFont(new Font("Dialog", Font.BOLD, 20));
+		b12_2.add(lblNewLabel_4_1_2);
+
+		Component horizontalStrut_2_1_1_1_2 = Box.createHorizontalStrut(175);
+		b12_2.add(horizontalStrut_2_1_1_1_2);
+
+		txtCCCD = new JTextField();
+		txtCCCD.setEditable(false);
+		txtCCCD.setFont(new Font("Dialog", Font.PLAIN, 20));
+		txtCCCD.setColumns(20);
+		b12_2.add(txtCCCD);
 		panelThree.setVisible(false);
 
 		// Main menu handler
@@ -489,6 +693,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
+
+		loadDataToPanelThree();
 	}
 
 	// Prevent editing on all cells
@@ -503,7 +709,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		};
 
 		tbl = new JTable(model);
-
 
 		rowSorter = new TableRowSorter<>(model);
 		tbl.setRowSorter(rowSorter);
@@ -530,6 +735,19 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), tinhTrang,
 					p.getGhiChu() });
 		}
+	}
+
+	private void loadDataToPanelThree() {
+		NhanVien_DAO nvDAO = new NhanVien_DAO();
+
+		NhanVien nv = nvDAO.getNhanVienByID(currentMaNV);
+
+		txtMaNV_2.setText(nv.getMaNV());
+		txtMatKhau_2.setText(nv.getMatKhau());
+		txtHoTen_2.setText(nv.getTenNV());
+		txtNgaySinh_2.setText(nv.getNgaySinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		txtSDT_2.setText(nv.getSdt());
+		txtCCCD.setText(nv.getCCCD());
 	}
 
 	private void clearInputs() {
@@ -679,6 +897,37 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Chọn một phòng để in hóa đơn");
+			}
+		} else if (o.equals(btnShow)) {
+			isPasswordShown = !isPasswordShown;
+			if (isPasswordShown) {
+				btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-custom.png")));
+				txtMatKhau_2.setEchoChar((char) 0);
+
+			} else {
+				btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-off-custom.png")));
+				txtMatKhau_2.setEchoChar('*');
+			}
+		} else if (o.equals(btnXacNhan_1)) {
+			if (txtMatKhau.getText().equals(txtMatKhauConfirm.getText())) {
+				NhanVien_DAO nvDAO = new NhanVien_DAO();
+				if (nvDAO.checkLogin(currentMaNV, txtMatKhauOld.getText().toString())) {
+					try {
+						NhanVien nv = nvDAO.getNhanVienByID(currentMaNV);
+						nv.setMatKhau(txtMatKhau.getText().toString());
+						nv.setNgaySinh(nv.getNgaySinh().plusDays(2));
+						nvDAO.editNhanVienByID(currentMaNV, nv);
+
+						JOptionPane.showMessageDialog(null, "Đã đổi mật khẩu thành công!");
+						loadDataToPanelThree();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage());
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Mật khẩu cũ sai, hãy kiểm tra lại!");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Mật khẩu xác nhận không khớp, hãy kiểm tra lại!");
 			}
 		}
 	}
