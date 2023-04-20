@@ -1,77 +1,110 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import connectDB.ConnectDB;
 import entity.HoaDon;
 
-import java.sql.*;
-import java.util.List;
-
 public class HoaDon_DAO {
-    public HoaDon_DAO() {
-    }
+	public HoaDon_DAO() {
+	}
 
-    public List<HoaDon> getAllHoaDon() throws Exception {
-        List<HoaDon> dsHoaDon = null;
+	public List<HoaDon> getAllHoaDon() throws Exception {
+		List<HoaDon> dsHoaDon = new ArrayList<HoaDon>();
 
-        ConnectDB.getInstance();
-        Connection con = ConnectDB.getConnection();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
 
-        String sql = "SELECT * FROM HoaDon";
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(sql);
+		String sql = "SELECT * FROM HoaDon";
+		Statement statement = con.createStatement();
+		ResultSet rs = statement.executeQuery(sql);
 
-        while (rs.next()) {
-            String maHoaDon = rs.getString("maHD");
-            String maPhong = rs.getString("maPhong");
-            String maNV = rs.getString("maNV");
-            String maKH = rs.getString("maKH");
-            double tongTien = rs.getDouble("tongTien");
-            Date ngayTaoHD = rs.getDate("ngayTaoHD");
+		while (rs.next()) {
+			String maHoaDon = rs.getString("maHD");
+			String maPhong = rs.getString("maPhong");
+			String maNV = rs.getString("maNV");
+			String maKH = rs.getString("maKH");
+			double tongTien = rs.getDouble("tongTien");
+			Date ngayTaoHD = rs.getDate("ngayTaoHD");
 
-            HoaDon hoaDon = new HoaDon(maHoaDon, maPhong, maNV, maKH, tongTien, ngayTaoHD.toLocalDate());
-            dsHoaDon.add(hoaDon);
-        }
+			HoaDon hoaDon = new HoaDon(maHoaDon, maPhong, maNV, maKH, tongTien, ngayTaoHD.toLocalDate());
+			dsHoaDon.add(hoaDon);
+		}
 
-        return dsHoaDon;
-    }
+		return dsHoaDon;
+	}
 
-    public int countHoaDon() {
-        ConnectDB.getInstance();
-        Connection conn = ConnectDB.getConnection();
-        int count = 0;
+	public HoaDon getHoaDonByID(String ID) {
+		ConnectDB.getInstance();
+		Connection conn = ConnectDB.getConnection();
+		HoaDon hd = null;
 
-        try {
-            String sql = "SELECT COUNT(*) FROM HoaDon";
-            PreparedStatement stm = conn.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
+		try {
+			String sql = "SELECT * FROM HoaDon WHERE maHD = ?";
+			PreparedStatement stm = conn.prepareStatement(sql);
+			stm.setString(1, ID);
+			ResultSet rs = stm.executeQuery();
 
-            if (rs.next()) {
-                count = rs.getInt(1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			if (rs.next()) {
+				String maHoaDon = rs.getString("maHD");
+				String maPhong = rs.getString("maPhong");
+				String maNV = rs.getString("maNV");
+				String maKH = rs.getString("maKH");
+				double tongTien = rs.getDouble("tongTien");
+				Date ngayTaoHD = rs.getDate("ngayTaoHD");
 
-        return count;
-    }
+				hd = new HoaDon(maHoaDon, maPhong, maNV, maKH, tongTien, ngayTaoHD.toLocalDate());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public void addNewHoaDon(HoaDon hd) {
-        ConnectDB.getInstance();
-        Connection conn = ConnectDB.getConnection();
+		return hd;
+	}
 
-        try {
-            String sql = "INSERT INTO HoaDon VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement stm = conn.prepareStatement(sql);
-            stm.setString(1, hd.getMaHD());
-            stm.setString(2, hd.getMaPhong());
-            stm.setString(3, hd.getMaNV());
-            stm.setString(4, hd.getMaKH());
-            stm.setDouble(5, hd.getTongTien());
-            stm.setDate(6, Date.valueOf(hd.getNgayTaoHD()));
+	public int countHoaDon() {
+		ConnectDB.getInstance();
+		Connection conn = ConnectDB.getConnection();
+		int count = 0;
 
-            stm.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+		try {
+			String sql = "SELECT COUNT(*) FROM HoaDon";
+			PreparedStatement stm = conn.prepareStatement(sql);
+			ResultSet rs = stm.executeQuery();
+
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+
+	public void addNewHoaDon(HoaDon hd) {
+		ConnectDB.getInstance();
+		Connection conn = ConnectDB.getConnection();
+
+		try {
+			String sql = "INSERT INTO HoaDon VALUES (?, ?, ?, ?, ?, ?)";
+			PreparedStatement stm = conn.prepareStatement(sql);
+			stm.setString(1, hd.getMaHD());
+			stm.setString(2, hd.getMaPhong());
+			stm.setString(3, hd.getMaNV());
+			stm.setString(4, hd.getMaKH());
+			stm.setDouble(5, hd.getTongTien());
+			stm.setDate(6, Date.valueOf(hd.getNgayTaoHD()));
+
+			stm.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

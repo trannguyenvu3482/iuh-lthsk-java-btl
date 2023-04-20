@@ -56,8 +56,6 @@ public class NhanVien_DAO {
                 String sdt = rs.getString("SDT");
                 String cccd = rs.getString("CCCD");
 
-                System.out.println(maNV);
-
                 NhanVien nhanVien = new NhanVien(maNV, password, hoTen, ngaySinh, sdt, cccd);
                 dsNhanVien.add(nhanVien);
             }

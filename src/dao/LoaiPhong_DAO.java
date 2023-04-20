@@ -55,9 +55,7 @@ public class LoaiPhong_DAO {
                 String maLoai = rs.getString("maLoai");
                 String tenLoai = rs.getString("tenLoai");
                 String chatLuong = rs.getString("chatLuong");
-
-                System.out.print(maLoai + " " + tenLoai + " " + chatLuong);
-
+                
                 return new LoaiPhong(maLoai, tenLoai, chatLuong);
             }
         } catch (Exception e) {

@@ -33,9 +33,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import dao.NhanVien_DAO;
-import dao.Phong_DAO;
 import entity.NhanVien;
-import entity.Phong;
 
 public class GUI_QuanLy extends JFrame implements ActionListener {
     private final JPanel panelTwo = new JPanel();
@@ -69,15 +67,6 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-
-        // Connect to SQL Server
-//        try {
-//            ConnectDB.getInstance().connect();
-//
-//            System.out.println("Connect success");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         getContentPane().setLayout(null);
 
@@ -161,10 +150,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         // Create table
         createTable();
 
-        JPanel panelThree = new JPanel();
-        panelThree.setBounds(0, 0, 925, 569);
-        panelThree.setBackground(Color.yellow);
-        panelThree.add(new JLabel("Panel three"));
+        JPanel panelThree = new PanelThree();
         contentPanel.setLayout(null);
 
         panelTwo.setBounds(0, 0, 925, 569);
@@ -439,8 +425,8 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (NhanVien p : list) {
-            model.addRow(new Object[]{p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh().plusDays(2)),
-                    p.getSdt(), p.getCCCD()});
+            model.addRow(new Object[]{p.getMaNV(), p.getMatKhau(), p.getTenNV(),
+                    dtf.format(p.getNgaySinh().plusDays(2)), p.getSdt(), p.getCCCD()});
         }
 
         panelTwo.setLayout(null);
@@ -455,8 +441,8 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (NhanVien p : list) {
-            model.addRow(new Object[]{p.getMaNV(), p.getMatKhau(), p.getTenNV(), dtf.format(p.getNgaySinh().plusDays(2)),
-                    p.getSdt(), p.getCCCD()});
+            model.addRow(new Object[]{p.getMaNV(), p.getMatKhau(), p.getTenNV(),
+                    dtf.format(p.getNgaySinh().plusDays(2)), p.getSdt(), p.getCCCD()});
         }
     }
 
@@ -492,8 +478,6 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Thêm thành công");
                 refreshTable();
             } catch (Exception e2) {
-                System.out.println(e.getClass().getName());
-
                 if (e2.getMessage().startsWith("For input string: ")) {
                     JOptionPane.showMessageDialog(null, "Lỗi: Number must be double");
                 } else {

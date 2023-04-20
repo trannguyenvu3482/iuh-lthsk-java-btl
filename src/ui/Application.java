@@ -20,8 +20,6 @@ public class Application {
 
         currentLoggedInUser = f.getMaNVDangNhap();
 
-        System.out.println(currentLoggedInUser);
-
         if (currentLoggedInUser.equals("admin")) {
             GUI_QuanLy h = new GUI_QuanLy();
             h.setVisible(true);
