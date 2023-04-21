@@ -26,7 +26,7 @@ public List<KhachHang> getAllKhachHang() throws Exception{
 
         while (rs.next()) {
             String maKH = rs.getString("maKH");
-            String tenKH = rs.getString("tenKH");
+            String tenKH = rs.getString("hoTenKH");
             LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
             String SDT = rs.getString("SDT");
             String CCCD = rs.getString("CCCD");

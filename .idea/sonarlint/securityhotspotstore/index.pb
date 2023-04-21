@@ -8,16 +8,12 @@ I
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
-J
-src/dao/KhachHang_DAO.java,0/a/0a95f73df5c1b5f1c6667c01cad1b80b34d4470f
 F
 src/dao/Phong_DAO.java,8/4/84157c9d1b4f8f086a6d71e4a1033e4bf151a609
 8
 .project,f/8/f8b41ce76d7b80d2b47e91b5f92c15f00eccf187
 I
 src/entity/LoaiPhong.java,3/7/378aaea842ebc31e9ed5b5171a0fbc9c4da6d754
-I
-src/dao/NhanVien_DAO.java,4/a/4a606b8ef8a568b93982f695b9f2455cb7200b49
 J
 src/dao/LoaiPhong_DAO.java,4/d/4d5ad89af53de23060d2715ecc0a6071608a39ea
 :

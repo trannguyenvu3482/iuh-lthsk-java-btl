@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -268,7 +270,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
     }
 
     @SuppressWarnings("resource")
-    public void writeFileHoaDon(KhachHang k, Phong p) {
+    public void writeFileHoaDon(KhachHang k, Phong p, Boolean isNewKhachHang) {
         try {
             HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
             int countHoaDon = hoaDonDAO.countHoaDon();
@@ -294,10 +296,12 @@ public class FormInHoaDon extends JDialog implements ActionListener {
 
                 HoaDon hd = new HoaDon(maHD, idPhong, maNV, k.getMaKH(), p.getGiaPhong(), LocalDate.now());
 
-                if (!khachHangDAO.checkKhachHangByID(k.getMaKH())) {
-                    khachHangDAO.addKhachHang(k);
-                } else {
-                    throw new Exception("Khách hàng đã tồn tại");
+                if (Boolean.TRUE.equals(isNewKhachHang)) {
+                    if ( !khachHangDAO.checkKhachHangByID(k.getMaKH())) {
+                        khachHangDAO.addKhachHang(k);
+                    } else {
+                        throw new Exception("Khách hàng đã tồn tại");
+                    }
                 }
 
                 hoaDonDAO.addNewHoaDon(hd);
@@ -338,7 +342,9 @@ public class FormInHoaDon extends JDialog implements ActionListener {
                 fw.write("Chất lượng: " + chatLuong);
                 fw.write("\n");
 
-                fw.write("Giá phòng: " + hd.getTongTien());
+                NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+                fw.write("Giá phòng: " + nf.format(hd.getTongTien()));
                 fw.write("\n");
 
                 fw.write("----------------------------------------");
@@ -363,6 +369,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
         Object o = e.getSource();
         if (o == btnInHoaDon) {
             Phong_DAO phongDAO = new Phong_DAO();
+            KhachHang_DAO khDAO = new KhachHang_DAO();
 
             String maKH = txtMaKH.getText();
             String hoTenKH = txtHoTenKH.getText();
@@ -370,11 +377,19 @@ public class FormInHoaDon extends JDialog implements ActionListener {
             String sdt = txtSDT.getText();
             String cccd = txtCCCD.getText();
 
+
             try {
+                for (KhachHang kh : khDAO.getAllKhachHang()) {
+                    if (kh.getCCCD().equals(cccd)) {
+                        JOptionPane.showMessageDialog(null, "Trùng mã CCCD với một khách hàng khác!");
+                        return;
+                    }
+                }
+
                 writeFileHoaDon(
                         new KhachHang(maKH, hoTenKH,
                                 LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")), sdt, cccd),
-                        phongDAO.getPhongByID(idPhong));
+                        phongDAO.getPhongByID(idPhong), true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -405,7 +420,7 @@ public class FormInHoaDon extends JDialog implements ActionListener {
                     throw new Exception("Chưa kiểm tra khách hàng");
                 } else {
                     writeFileHoaDon(new KhachHang_DAO().getKhachHangByID(currentMaKH),
-                            new Phong_DAO().getPhongByID(idPhong));
+                            new Phong_DAO().getPhongByID(idPhong), false);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());

@@ -204,6 +204,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		tbl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				LoaiPhong_DAO lpDAO = new LoaiPhong_DAO();
+				String maLoai = tbl.getValueAt(tbl.getSelectedRow(), 1).toString();
 				int row = tbl.getSelectedRow();
 
 				if (tbl.getValueAt(row, 3).equals("Đã thuê")) {
@@ -213,7 +215,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				}
 
 				txtMaPhong.setText(tbl.getValueAt(row, 0).toString());
-				cboLoaiPhong.setSelectedItem(tbl.getValueAt(row, 1).toString());
+				cboLoaiPhong.setSelectedItem(lpDAO.getLoaiPhongByID(maLoai).getTenLoai());
+				cboChatLuong.setSelectedItem(lpDAO.getLoaiPhongByID(maLoai).getChatLuong());
 				txtGiaPhong.setText(tbl.getValueAt(row, 2).toString());
 				txtGhiChu.setText(tbl.getValueAt(row, 4).toString());
 
@@ -222,7 +225,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		});
 
 		JPanel panelOne = new JPanel();
-		panelOne.setBounds(1000, 0, 725, 569);
+		panelOne.setBounds(0, 0, 725, 569);
 		panelOne.setLayout(null);
 		JLabel lblPhnMmQun = new JLabel("Phần mềm quản lý khách sạn");
 		lblPhnMmQun.setForeground(new Color(237, 51, 59));
@@ -261,7 +264,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		lblTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
-		panelTwo.setBounds(1000, 0, 725, 569);
+		panelTwo.setBounds(0, 0, 725, 569);
 		panelTwo.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.add(panelTwo);
 
@@ -850,6 +853,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 			String maLoai = loaiPhongDAO.getMaFromLoai(cboFilterLoaiPhong.getSelectedItem().toString(),
 					cboFilterChatLuong.getSelectedItem().toString());
+
 			rowSorter.setRowFilter(RowFilter.regexFilter(maLoai, 1));
 		} else if (o.equals(cboFilterTinhTrang)) {
 			if (cboFilterTinhTrang.getSelectedIndex() == 0) {

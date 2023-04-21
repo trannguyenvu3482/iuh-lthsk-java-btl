@@ -464,6 +464,13 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
             try {
                 NhanVien_DAO nvDAO = new NhanVien_DAO();
 
+                for (NhanVien nv2: nvDAO.getAllNhanVien()) {
+                    if (nv2.getMaNV().equals(txtMaNV.getText())) {
+                        JOptionPane.showMessageDialog(null, "Lỗi: Mã nhân viên đã tồn tại");
+                        return;
+                    }
+                }
+
                 if (!txtNgaySinh.getText().matches("\\d{2}/\\d{2}/\\d{4}")) {
                     JOptionPane.showMessageDialog(null, "Lỗi: Ngày sinh không hợp lệ");
                     return;
