@@ -47,7 +47,6 @@ import entity.NhanVien;
 import entity.Phong;
 
 public class GUI_NhanVien extends JFrame implements ActionListener {
-	private boolean isPasswordShown = false;
 	private final JPanel panelTwo = new JPanel();
 	private final JTextField txtMaPhong = new JTextField();
 	private final JTextField txtGiaPhong = new JTextField();
@@ -74,6 +73,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JButton btnInHoaDon = new JButton("In hóa đơn");
 	private final JButton btnXacNhan_1 = new JButton("Xác nhận");
 	private final JButton btnShow = new JButton("");
+	private boolean isPasswordShown = false;
 	private String currentMaNV = "";
 	private JTable tbl;
 	private DefaultTableModel model;
@@ -222,7 +222,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		});
 
 		JPanel panelOne = new JPanel();
-		panelOne.setBounds(0, 0, 725, 569);
+		panelOne.setBounds(1000, 0, 725, 569);
 		panelOne.setLayout(null);
 		JLabel lblPhnMmQun = new JLabel("Phần mềm quản lý khách sạn");
 		lblPhnMmQun.setForeground(new Color(237, 51, 59));
@@ -261,7 +261,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		lblTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
-		panelTwo.setBounds(0, 0, 725, 569);
+		panelTwo.setBounds(1000, 0, 725, 569);
 		panelTwo.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.add(panelTwo);
 
@@ -347,7 +347,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b8.add(lblNewLabel_2);
 
 		cboFilterTinhTrang.addItem("Còn trống");
-		cboFilterTinhTrang.addItem("Đã đặt");
+		cboFilterTinhTrang.addItem("Đã thuê");
 		b8.add(cboFilterTinhTrang);
 		b8.add(Box.createHorizontalStrut(10));
 
@@ -424,7 +424,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		btnTimKiem.addActionListener(this);
 		btnClearBoLoc.addActionListener(this);
 		btnInHoaDon.addActionListener(this);
-		btnShow.addActionListener(this);
 		btnXacNhan_1.addActionListener(this);
 
 		// Filter handler
@@ -475,6 +474,14 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtMatKhauOld.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtMatKhauOld.setColumns(20);
 		b12_1_1.add(txtMatKhauOld);
+
+		Component horizontalStrut_2_1_1_3_1 = Box.createHorizontalStrut(20);
+		b12_1_1.add(horizontalStrut_2_1_1_3_1);
+		b12_1_1.add(btnShow);
+		btnShow.addActionListener(this);
+
+		btnShow.setPreferredSize(new Dimension(40, 30));
+		btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-off-custom.png")));
 
 		Component verticalStrut_1_2 = Box.createVerticalStrut(20);
 		b10_1.add(verticalStrut_1_2);
@@ -557,13 +564,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtMatKhau_2.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtMatKhau_2.setColumns(20);
 		b12_2_1.add(txtMatKhau_2);
-
-		Component horizontalStrut_2_1_1_3 = Box.createHorizontalStrut(20);
-		b12_2_1.add(horizontalStrut_2_1_1_3);
-
-		btnShow.setPreferredSize(new Dimension(40, 30));
-		btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-custom.png")));
-		b12_2_1.add(btnShow);
 
 		Box b12_2_1_1_1 = Box.createHorizontalBox();
 		b10_2.add(b12_2_1_1_1);
@@ -902,11 +902,11 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			isPasswordShown = !isPasswordShown;
 			if (isPasswordShown) {
 				btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-custom.png")));
-				txtMatKhau_2.setEchoChar((char) 0);
+				txtMatKhauOld.setEchoChar((char) 0);
 
 			} else {
 				btnShow.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/eye-off-custom.png")));
-				txtMatKhau_2.setEchoChar('*');
+				txtMatKhauOld.setEchoChar('*');
 			}
 		} else if (o.equals(btnXacNhan_1)) {
 			if (txtMatKhau.getText().equals(txtMatKhauConfirm.getText())) {
@@ -919,6 +919,11 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 						nvDAO.editNhanVienByID(currentMaNV, nv);
 
 						JOptionPane.showMessageDialog(null, "Đã đổi mật khẩu thành công!");
+
+						txtMatKhauOld.setText("");
+						txtMatKhau.setText("");
+						txtMatKhauConfirm.setText("");
+
 						loadDataToPanelThree();
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage());

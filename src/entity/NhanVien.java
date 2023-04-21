@@ -47,7 +47,7 @@ public class NhanVien {
 	}
 
 	public void setTenNV(String tenNV) throws Exception {
-		if (tenNV.matches("^[\\p{Lu}][\\p{L}]+([\\s][\\p{Lu}][\\p{L}]+){1,}$")) {
+		if (tenNV.matches("^\\p{Lu}\\p{Ll}+(\\s+\\p{Lu}\\p{Ll}+)+$")) {
 			this.tenNV = tenNV;
 		} else
 			throw new Exception("Tên nhân viên phải có ít nhất 2 từ, mỗi từ bắt đầu bằng chữ hoa");

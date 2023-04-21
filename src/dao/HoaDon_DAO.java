@@ -16,9 +16,8 @@ public class HoaDon_DAO {
 	}
 
 	public List<HoaDon> getAllHoaDon() throws Exception {
-		List<HoaDon> dsHoaDon = new ArrayList<HoaDon>();
+		List<HoaDon> dsHoaDon = new ArrayList<>();
 
-		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 
 		String sql = "SELECT * FROM HoaDon";
