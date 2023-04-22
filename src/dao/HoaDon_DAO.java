@@ -40,7 +40,6 @@ public class HoaDon_DAO {
 	}
 
 	public HoaDon getHoaDonByID(String ID) {
-		ConnectDB.getInstance();
 		Connection conn = ConnectDB.getConnection();
 		HoaDon hd = null;
 
@@ -68,7 +67,6 @@ public class HoaDon_DAO {
 	}
 
 	public int countHoaDon() {
-		ConnectDB.getInstance();
 		Connection conn = ConnectDB.getConnection();
 		int count = 0;
 
@@ -88,7 +86,6 @@ public class HoaDon_DAO {
 	}
 
 	public void addNewHoaDon(HoaDon hd) {
-		ConnectDB.getInstance();
 		Connection conn = ConnectDB.getConnection();
 
 		try {

@@ -18,7 +18,6 @@ public class NhanVien_DAO {
 
     public boolean checkLogin(String maNhanVien, String password) {
         try {
-            ConnectDB.getInstance();
             Connection con = ConnectDB.getConnection();
 
             String sql = "SELECT * FROM NhanVien WHERE maNV = '" + maNhanVien + "' AND matkhau = '" + password + "'";
@@ -40,7 +39,6 @@ public class NhanVien_DAO {
         List<NhanVien> dsNhanVien = new ArrayList<>();
 
         try {
-            ConnectDB.getInstance();
             Connection con = ConnectDB.getConnection();
 
             String sql = "SELECT * FROM NhanVien";
@@ -68,7 +66,6 @@ public class NhanVien_DAO {
     }
 
     public NhanVien getNhanVienByID(String ID) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         Phong h;
 
@@ -99,7 +96,6 @@ public class NhanVien_DAO {
     }
 
     public void addNhanVien(NhanVien nv) throws Exception {
-        ConnectDB.getInstance();
         Connection con = ConnectDB.getConnection();
 
         String sql = "INSERT INTO NhanVien VALUES (?, ?, ?, ?, ?, ?)";
@@ -116,7 +112,6 @@ public class NhanVien_DAO {
     }
 
     public boolean editNhanVienByID(String ID, NhanVien nv) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         try {
             String sql = "UPDATE NhanVien SET matKhau = ?, hoTenNV = ?, ngaySinh = ?, SDT = ?, CCCD = ? WHERE maNV = ?";
@@ -137,7 +132,6 @@ public class NhanVien_DAO {
     }
 
     public void deletePhongByID(String ID) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         try {
             String sql = "DELETE FROM NhanVien WHERE maNV = ?";

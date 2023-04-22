@@ -57,9 +57,9 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 
     private final JTable tbl;
     private DefaultTableModel model;
-    private JTextField txtMatKhau;
-    private JTextField txtSDT;
-    private JTextField txtCCCD;
+    private final JTextField txtMatKhau;
+    private final JTextField txtSDT;
+    private final JTextField txtCCCD;
 
     public GUI_QuanLy() {
         setTitle("Phần mềm quản lý khách sạn - Nhóm 2");
@@ -159,13 +159,12 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 
         JPanel inputPanel = new JPanel();
         inputPanel.setBorder(
-                new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Th\u00F4ng tin nh\u00E2n vi\u00EAn",
+                new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Thông tin nhân viên",
                         TitledBorder.LEADING, TitledBorder.TOP, null, new Color(51, 51, 51)));
         inputPanel.setBounds(0, 0, 924, 193);
         panelTwo.add(inputPanel);
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
 
-        // TODO: Box Layout
         Box b = Box.createVerticalBox();
         Box b1 = Box.createHorizontalBox();
         Box b2 = Box.createHorizontalBox();
@@ -418,7 +417,6 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
             }
         };
 
-        // TODO: Add data
         NhanVien_DAO nvDAO = new NhanVien_DAO();
         List<NhanVien> list = nvDAO.getAllNhanVien();
 
@@ -455,7 +453,6 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
         txtCCCD.setText("");
     }
 
-    // TODO: Button handlers
     @Override
     public void actionPerformed(ActionEvent e) {
         Object o = e.getSource();

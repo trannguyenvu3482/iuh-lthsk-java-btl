@@ -18,7 +18,6 @@ public class LoaiPhong_DAO {
         ArrayList<LoaiPhong> dsLoaiPhong = new ArrayList<>();
 
         try {
-            ConnectDB.getInstance();
             Connection con = ConnectDB.getConnection();
 
             String sql = "SELECT * FROM LoaiPhong";
@@ -42,7 +41,6 @@ public class LoaiPhong_DAO {
     }
 
     public LoaiPhong getLoaiPhongByID(String ID) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
 
         try {
@@ -66,7 +64,6 @@ public class LoaiPhong_DAO {
     }
 
     public String getMaFromLoai(String loaiPhong, String chatLuong) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         LoaiPhong h;
 
@@ -78,8 +75,7 @@ public class LoaiPhong_DAO {
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
-                String maLoai = rs.getString("maLoai");
-                return maLoai;
+                return rs.getString("maLoai");
             }
         } catch (Exception e) {
             e.printStackTrace();

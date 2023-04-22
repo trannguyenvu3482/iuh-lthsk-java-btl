@@ -44,7 +44,6 @@ public class Phong_DAO {
     }
 
     public Phong getPhongByID(String ID) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         Phong h;
 
@@ -73,7 +72,6 @@ public class Phong_DAO {
     }
 
     public void addPhong(Phong p) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
 
         String sql = "INSERT INTO Phong VALUES (?, ?, ?, ?, ?)";
@@ -88,7 +86,6 @@ public class Phong_DAO {
     }
 
     public boolean editPhongByID(String ID, Phong p) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         try {
             String sql = "UPDATE Phong SET maLoai = ?, giaPhong = ?, tinhTrang = ?, ghiChu = ? WHERE maPhong = ?";
@@ -107,7 +104,6 @@ public class Phong_DAO {
     }
 
     public boolean deletePhongByID(String ID) {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
 
         try {

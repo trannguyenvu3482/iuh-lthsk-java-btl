@@ -79,16 +79,16 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private DefaultTableModel model;
 
 	private TableRowSorter<DefaultTableModel> rowSorter;
-	private JTextField txtMaNV_2;
-	private JTextField txtSDT_2;
-	private JTextField txtMaNV_1;
-	private JPasswordField txtMatKhau;
-	private JPasswordField txtMatKhauConfirm;
-	private JTextField txtCCCD;
-	private JPasswordField txtMatKhau_2;
-	private JTextField txtNgaySinh_2;
-	private JTextField txtHoTen_2;
-	private JPasswordField txtMatKhauOld;
+	private final JTextField txtMaNV_2;
+	private final JTextField txtSDT_2;
+	private final JTextField txtMaNV_1;
+	private final JPasswordField txtMatKhau;
+	private final JPasswordField txtMatKhauConfirm;
+	private final JTextField txtCCCD;
+	private final JPasswordField txtMatKhau_2;
+	private final JTextField txtNgaySinh_2;
+	private final JTextField txtHoTen_2;
+	private final JPasswordField txtMatKhauOld;
 
 	public GUI_NhanVien(String maNV) {
 		setTitle("Phần mềm quản lý khách sạn - Nhóm 2");
@@ -200,7 +200,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		// Set font size of table
 		tbl.setFont(new Font("Arial", Font.PLAIN, 20));
 
-		// TODO: Table handlers
 		tbl.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -275,7 +274,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		panelTwo.add(inputPanel);
 		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
 
-		// TODO: Box Layout
 		Box b = Box.createVerticalBox();
 		Box b1 = Box.createHorizontalBox();
 		Box b2 = Box.createHorizontalBox();
@@ -439,7 +437,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		panelThree.setLayout(new BoxLayout(panelThree, BoxLayout.Y_AXIS));
 
 		Box b10_1 = Box.createVerticalBox();
-		b10_1.setBorder(new TitledBorder(null, "Ch\u1EC9nh s\u1EEDa th\u00F4ng tin", TitledBorder.LEADING,
+		b10_1.setBorder(new TitledBorder(null, "Chỉnh sửa thông tin", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 		panelThree.add(b10_1);
 
@@ -532,7 +530,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		panelThree.add(verticalStrut);
 
 		Box b10_2 = Box.createVerticalBox();
-		b10_2.setBorder(new TitledBorder(null, "Th\u00F4ng tin nh\u00E2n vi\u00EAn", TitledBorder.LEADING,
+		b10_2.setBorder(new TitledBorder(null, "Thông tin nhân viên", TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 		panelThree.add(b10_2);
 
@@ -716,7 +714,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		rowSorter = new TableRowSorter<>(model);
 		tbl.setRowSorter(rowSorter);
 
-		// TODO: Add data
 		Phong_DAO hotels = new Phong_DAO();
 		List<Phong> list = hotels.getAllPhong();
 
@@ -759,7 +756,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtGhiChu.setText("");
 	}
 
-	// TODO: Button handlers
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -915,10 +911,10 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		} else if (o.equals(btnXacNhan_1)) {
 			if (txtMatKhau.getText().equals(txtMatKhauConfirm.getText())) {
 				NhanVien_DAO nvDAO = new NhanVien_DAO();
-				if (nvDAO.checkLogin(currentMaNV, txtMatKhauOld.getText().toString())) {
+				if (nvDAO.checkLogin(currentMaNV, txtMatKhauOld.getText())) {
 					try {
 						NhanVien nv = nvDAO.getNhanVienByID(currentMaNV);
-						nv.setMatKhau(txtMatKhau.getText().toString());
+						nv.setMatKhau(txtMatKhau.getText());
 						nv.setNgaySinh(nv.getNgaySinh().plusDays(2));
 						nvDAO.editNhanVienByID(currentMaNV, nv);
 

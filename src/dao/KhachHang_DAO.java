@@ -16,7 +16,6 @@ public class KhachHang_DAO {
     }
 
 public List<KhachHang> getAllKhachHang() throws Exception{
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         List<KhachHang> dsKhachHang = new ArrayList<>();
 
@@ -39,7 +38,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
 }
 
     public KhachHang getKhachHangByID(String ID) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
         PreparedStatement stm = conn.prepareStatement(sql);
@@ -60,7 +58,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
     }
 
     public KhachHang getKhachHangByCCCD(String CCCD) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "SELECT * FROM KhachHang WHERE CCCD = ?";
         PreparedStatement stm = conn.prepareStatement(sql);
@@ -81,7 +78,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
     }
 
     public boolean checkKhachHangByID(String ID) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
         PreparedStatement stm = conn.prepareStatement(sql);
@@ -92,7 +88,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
     }
 
     public void addKhachHang(KhachHang kh) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "INSERT INTO KhachHang VALUES(?, ?, ?, ?, ?)";
         PreparedStatement stm = conn.prepareStatement(sql);
@@ -105,7 +100,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
     }
 
     public void updateKhachHang(KhachHang kh) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "UPDATE KhachHang SET tenKH = ?, ngaySinh = ?, SDT = ?, CCCD = ? WHERE maKH = ?";
         PreparedStatement stm = conn.prepareStatement(sql);
@@ -118,7 +112,6 @@ public List<KhachHang> getAllKhachHang() throws Exception{
     }
 
     public void deleteKhachHang(String maKH) throws Exception {
-        ConnectDB.getInstance();
         Connection conn = ConnectDB.getConnection();
         String sql = "DELETE FROM KhachHang WHERE maKH = ?";
         PreparedStatement stm = conn.prepareStatement(sql);
