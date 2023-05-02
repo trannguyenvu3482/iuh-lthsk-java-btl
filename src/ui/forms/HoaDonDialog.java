@@ -1,4 +1,4 @@
-package ui;
+package ui.forms;
 
 import java.awt.Color;
 import java.awt.Component;

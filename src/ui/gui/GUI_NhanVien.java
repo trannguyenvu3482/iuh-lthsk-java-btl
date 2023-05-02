@@ -1,10 +1,11 @@
-package ui;
+package ui.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,9 +46,11 @@ import dao.NhanVien_DAO;
 import dao.Phong_DAO;
 import entity.NhanVien;
 import entity.Phong;
+import ui.panels.PanelCheckin;
+import ui.panels.PanelCheckout;
 
 public class GUI_NhanVien extends JFrame implements ActionListener {
-	private final JPanel panelTwo = new JPanel();
+	private final JPanel panelRoom = new JPanel();
 	private final JTextField txtMaPhong = new JTextField();
 	private final JTextField txtGiaPhong = new JTextField();
 	private final JTextField txtGhiChu = new JTextField();
@@ -70,7 +73,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JButton btnHuy = new JButton("Xóa trắng");
 	private final JButton btnTimKiem = new JButton("Tìm kiếm");
 	private final JButton btnClearBoLoc = new JButton("Xóa bộ lọc");
-	private final JButton btnInHoaDon = new JButton("In hóa đơn");
 	private final JButton btnXacNhan_1 = new JButton("Xác nhận");
 	private final JButton btnShow = new JButton("");
 	private boolean isPasswordShown = false;
@@ -92,7 +94,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 	public GUI_NhanVien(String maNV) {
 		setTitle("Phần mềm quản lý khách sạn - Nhóm 2");
-		setSize(1000, 600);
+		setSize(1000, 700);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -105,7 +107,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		leftPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		leftPanel.setBackground(new Color(204, 204, 255));
 		leftPanel.setLocation(0, 0);
-		leftPanel.setSize(271, 569);
+		leftPanel.setSize(271, 669);
 		getContentPane().add(leftPanel, BorderLayout.WEST);
 		leftPanel.setLayout(null);
 
@@ -124,66 +126,93 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		JPanel menuPanel = new JPanel();
 		menuPanel.setBackground(new Color(0, 0, 0, 0));
-		menuPanel.setBounds(0, 90, 271, 479);
+		menuPanel.setBounds(0, 90, 271, 579);
 		leftPanel.add(menuPanel);
 		menuPanel.setLayout(null);
 
-		JPanel menuPanelItem1 = new JPanel();
-		menuPanelItem1.setBackground(new Color(36, 31, 49));
-		menuPanelItem1.setBounds(0, 34, 271, 80);
-		menuPanel.add(menuPanelItem1);
-		menuPanelItem1.setLayout(new BorderLayout(0, 0));
+		JPanel menuPanelInfo = new JPanel();
+		menuPanelInfo.setBackground(new Color(36, 31, 49));
+		menuPanelInfo.setBounds(0, 34, 271, 80);
+		menuPanel.add(menuPanelInfo);
+		menuPanelInfo.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblThngTinPhn = new JLabel("Thông tin phần mềm");
 		lblThngTinPhn.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/info-icon.png")));
 
 		lblThngTinPhn.setForeground(new Color(255, 255, 255));
 		lblThngTinPhn.setHorizontalAlignment(SwingConstants.CENTER);
-		menuPanelItem1.add(lblThngTinPhn, BorderLayout.CENTER);
+		menuPanelInfo.add(lblThngTinPhn, BorderLayout.CENTER);
 		lblThngTinPhn.setFont(new Font("Dialog", Font.BOLD, 20));
 
-		JPanel menuPanelItem2 = new JPanel();
-		menuPanelItem2.setForeground(new Color(255, 255, 255));
-		menuPanelItem2.setBackground(new Color(36, 31, 49));
-		menuPanelItem2.setBounds(0, 144, 271, 80);
-		menuPanel.add(menuPanelItem2);
-		menuPanelItem2.setLayout(new BorderLayout(0, 0));
+		JPanel menuPanelRoom = new JPanel();
+		menuPanelRoom.setForeground(Color.WHITE);
+		menuPanelRoom.setBackground(new Color(36, 31, 49));
+		menuPanelRoom.setBounds(0, 140, 271, 80);
+		menuPanel.add(menuPanelRoom);
+		menuPanelRoom.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblQunLPhng = new JLabel("Quản lý phòng");
+		JLabel lblQunLPhng_2 = new JLabel("Quản lý phòng");
+		lblQunLPhng_2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblQunLPhng_2.setForeground(Color.WHITE);
+		lblQunLPhng_2.setFont(new Font("Dialog", Font.BOLD, 20));
+		menuPanelRoom.add(lblQunLPhng_2, BorderLayout.CENTER);
+
+		JPanel menuPanelCheckin = new JPanel();
+		menuPanelCheckin.setForeground(new Color(255, 255, 255));
+		menuPanelCheckin.setBackground(new Color(36, 31, 49));
+		menuPanelCheckin.setBounds(0, 240, 271, 80);
+		menuPanel.add(menuPanelCheckin);
+		menuPanelCheckin.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblQunLPhng = new JLabel("Check-in");
 		lblQunLPhng.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/magnify-icon.png")));
 		lblQunLPhng.setForeground(new Color(255, 255, 255));
 		lblQunLPhng.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQunLPhng.setFont(new Font("Dialog", Font.BOLD, 20));
-		menuPanelItem2.add(lblQunLPhng);
+		menuPanelCheckin.add(lblQunLPhng);
 
-		JPanel menuPanelItem3 = new JPanel();
-		menuPanelItem3.setBackground(new Color(36, 31, 49));
-		menuPanelItem3.setBounds(0, 254, 271, 80);
-		menuPanel.add(menuPanelItem3);
-		menuPanelItem3.setLayout(new BorderLayout(0, 0));
+		JPanel menuPanelCheckout = new JPanel();
+		menuPanelCheckout.setForeground(Color.WHITE);
+		menuPanelCheckout.setBackground(new Color(36, 31, 49));
+		menuPanelCheckout.setBounds(0, 335, 271, 80);
+		menuPanel.add(menuPanelCheckout);
+		menuPanelCheckout.setLayout(new BorderLayout(0, 0));
+
+		JLabel lblCheckout = new JLabel("Check-out");
+		lblCheckout.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCheckout.setForeground(Color.WHITE);
+		lblCheckout.setFont(new Font("Dialog", Font.BOLD, 20));
+		menuPanelCheckout.add(lblCheckout, BorderLayout.CENTER);
+
+		JPanel menuPanelAdjustInfo = new JPanel();
+		menuPanelAdjustInfo.setBackground(new Color(36, 31, 49));
+		menuPanelAdjustInfo.setBounds(0, 440, 271, 80);
+		menuPanel.add(menuPanelAdjustInfo);
+		menuPanelAdjustInfo.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblThngKCc = new JLabel("Chỉnh sửa thông tin");
 		lblThngKCc.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/account-cog-custom.png")));
 		lblThngKCc.setForeground(new Color(255, 255, 255));
 		lblThngKCc.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThngKCc.setFont(new Font("Dialog", Font.BOLD, 20));
-		menuPanelItem3.add(lblThngKCc);
+		menuPanelAdjustInfo.add(lblThngKCc);
 
 		JLabel lblNhm = new JLabel("Welcome, " + currentMaNV);
+		lblNhm.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNhm.setBounds(0, 630, 271, 28);
+		leftPanel.add(lblNhm);
 		lblNhm.setFont(new Font("Dialog", Font.BOLD, 20));
-		lblNhm.setBounds(12, 439, 259, 28);
-		menuPanel.add(lblNhm);
 
 		JPanel contentPanel = new JPanel();
-		contentPanel.setBounds(271, 0, 725, 569);
+		contentPanel.setBounds(271, 0, 725, 669);
 		getContentPane().add(contentPanel);
 
 		// Create table
 		createTable();
 
-		JPanel panelThree = new JPanel();
-		panelThree.setBounds(0, 0, 725, 569);
-		panelThree.setBackground(UIManager.getColor("Button.background"));
+		JPanel panelAdjustInfo = new JPanel();
+		panelAdjustInfo.setBounds(0, 0, 725, 669);
+		panelAdjustInfo.setBackground(UIManager.getColor("Button.background"));
 		contentPanel.setLayout(null);
 
 		tbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -219,59 +248,82 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				txtGiaPhong.setText(tbl.getValueAt(row, 2).toString());
 				txtGhiChu.setText(tbl.getValueAt(row, 4).toString());
 
-				btnInHoaDon.setVisible(true);
 			}
 		});
 
-		JPanel panelOne = new JPanel();
-		panelOne.setBounds(0, 0, 725, 569);
-		panelOne.setLayout(null);
+		JPanel panelInfo = new JPanel();
+		panelInfo.setBounds(0, 0, 725, 669);
+		panelInfo.setLayout(null);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 12, 725, 68);
+		panelInfo.add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		JLabel lblPhnMmQun = new JLabel("Phần mềm quản lý khách sạn");
+		panel.add(lblPhnMmQun);
 		lblPhnMmQun.setForeground(new Color(237, 51, 59));
 		lblPhnMmQun.setFont(new Font("Dialog", Font.BOLD, 30));
-		lblPhnMmQun.setBounds(161, 12, 441, 68);
-		panelOne.add(lblPhnMmQun);
 
-		contentPanel.add(panelOne);
+		contentPanel.add(panelInfo);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(0, 72, 725, 45);
+		panelInfo.add(panel_1);
+		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JLabel lblNhm_1 = new JLabel("Nhóm 2:");
+		panel_1.add(lblNhm_1);
 		lblNhm_1.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblNhm_1.setBounds(325, 78, 112, 45);
-		panelOne.add(lblNhm_1);
 
-		JLabel lblNhm_1_1 = new JLabel("Trần Ngọc Phát - 12345678");
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(0, 135, 725, 45);
+		panelInfo.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblNhm_1_1 = new JLabel("Trần Ngọc Phát");
+		panel_2.add(lblNhm_1_1);
 		lblNhm_1_1.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblNhm_1_1.setBounds(210, 135, 331, 45);
-		panelOne.add(lblNhm_1_1);
 
-		JLabel lblNhm_1_1_1 = new JLabel("Trần Nguyên Vũ - 12345678");
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(0, 205, 725, 45);
+		panelInfo.add(panel_3);
+		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblNhm_1_1_1 = new JLabel("Trần Nguyên Vũ");
+		panel_3.add(lblNhm_1_1_1);
 		lblNhm_1_1_1.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblNhm_1_1_1.setBounds(205, 205, 356, 45);
-		panelOne.add(lblNhm_1_1_1);
 
-		JLabel lblNhm_1_1_1_1 = new JLabel("Mai Nhật Hào - 12345678");
+		JPanel panel_4 = new JPanel();
+		panel_4.setBounds(0, 275, 725, 45);
+		panelInfo.add(panel_4);
+		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblNhm_1_1_1_1 = new JLabel("Mai Nhật Hào");
+		panel_4.add(lblNhm_1_1_1_1);
 		lblNhm_1_1_1_1.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblNhm_1_1_1_1.setBounds(220, 275, 331, 45);
-		panelOne.add(lblNhm_1_1_1_1);
 
-		JLabel lblNhm_1_1_1_1_1 = new JLabel("Võ Phước Hậu - 12345678");
+		JPanel panel_5 = new JPanel();
+		panel_5.setBounds(0, 345, 725, 45);
+		panelInfo.add(panel_5);
+		panel_5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JLabel lblNhm_1_1_1_1_1 = new JLabel("Võ Phước Hậu");
+		panel_5.add(lblNhm_1_1_1_1_1);
 		lblNhm_1_1_1_1_1.setFont(new Font("Dialog", Font.BOLD, 25));
-		lblNhm_1_1_1_1_1.setBounds(220, 345, 331, 45);
-		panelOne.add(lblNhm_1_1_1_1_1);
 
-		panelOne.setVisible(true);
+		panelInfo.setVisible(true);
 		lblTinhTrang.setFont(new Font("Dialog", Font.BOLD, 14));
 		lblTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
 
-		panelTwo.setBounds(0, 0, 725, 569);
-		panelTwo.setBackground(UIManager.getColor("Button.background"));
-		contentPanel.add(panelTwo);
+		panelRoom.setBounds(0, 0, 725, 669);
+		panelRoom.setBackground(UIManager.getColor("Button.background"));
+		contentPanel.add(panelRoom);
 
 		JPanel inputPanel = new JPanel();
-		inputPanel.setBorder(new TitledBorder(null, "Th\u00F4ng tin ph\u00F2ng", TitledBorder.LEADING, TitledBorder.TOP,
-				null, null));
+		inputPanel.setBorder(
+				new TitledBorder(null, "Thông tin phòng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		inputPanel.setBounds(0, 0, 715, 284);
-		panelTwo.add(inputPanel);
+		panelRoom.add(inputPanel);
 		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
 
 		Box b = Box.createVerticalBox();
@@ -322,7 +374,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b7.add(Box.createHorizontalStrut(10));
 		b7.add(btnClearBoLoc);
 		b7.add(Box.createHorizontalStrut(10));
-		b7.add(btnInHoaDon);
 
 		b8.setBorder(BorderFactory.createTitledBorder("Bộ lọc"));
 		cboFilterLoaiPhong.addItem("Phòng đơn");
@@ -407,16 +458,14 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
 		btnTimKiem.setFont(new Font("Arial", Font.BOLD, 15));
 		btnClearBoLoc.setFont(new Font("Arial", Font.BOLD, 15));
-		btnInHoaDon.setFont(new Font("Arial", Font.BOLD, 15));
 
 		inputPanel.add(b);
-		panelTwo.setVisible(false);
+		panelRoom.setVisible(false);
 		JScrollPane tblPane = new JScrollPane(tbl);
 		tblPane.setBorder(BorderFactory.createTitledBorder("Thông tin các phòng"));
-		tblPane.setBounds(0, 285, 715, 284);
+		tblPane.setBounds(0, 285, 715, 384);
 
-		btnInHoaDon.setVisible(false);
-		panelTwo.add(tblPane);
+		panelRoom.add(tblPane);
 
 		btnThem.addActionListener(this);
 		btnXoa.addActionListener(this);
@@ -424,7 +473,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		btnHuy.addActionListener(this);
 		btnTimKiem.addActionListener(this);
 		btnClearBoLoc.addActionListener(this);
-		btnInHoaDon.addActionListener(this);
 		btnXacNhan_1.addActionListener(this);
 
 		// Filter handler
@@ -433,13 +481,13 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		cboFilterTinhTrang.addActionListener(this);
 		cboFilterGia.addActionListener(this);
 
-		contentPanel.add(panelThree);
-		panelThree.setLayout(new BoxLayout(panelThree, BoxLayout.Y_AXIS));
+		contentPanel.add(panelAdjustInfo);
+		panelAdjustInfo.setLayout(new BoxLayout(panelAdjustInfo, BoxLayout.Y_AXIS));
 
 		Box b10_1 = Box.createVerticalBox();
-		b10_1.setBorder(new TitledBorder(null, "Chỉnh sửa thông tin", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		panelThree.add(b10_1);
+		b10_1.setBorder(
+				new TitledBorder(null, "Chỉnh sửa thông tin", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelAdjustInfo.add(b10_1);
 
 		Box b11_1 = Box.createHorizontalBox();
 		b10_1.add(b11_1);
@@ -527,12 +575,12 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b14_1.add(btnXacNhan_1);
 
 		Component verticalStrut = Box.createVerticalStrut(15);
-		panelThree.add(verticalStrut);
+		panelAdjustInfo.add(verticalStrut);
 
 		Box b10_2 = Box.createVerticalBox();
-		b10_2.setBorder(new TitledBorder(null, "Thông tin nhân viên", TitledBorder.LEADING,
-				TitledBorder.TOP, null, null));
-		panelThree.add(b10_2);
+		b10_2.setBorder(
+				new TitledBorder(null, "Thông tin nhân viên", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelAdjustInfo.add(b10_2);
 
 		Box b11 = Box.createHorizontalBox();
 		b10_2.add(b11);
@@ -629,68 +677,132 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtCCCD.setFont(new Font("Dialog", Font.PLAIN, 20));
 		txtCCCD.setColumns(20);
 		b12_2.add(txtCCCD);
-		panelThree.setVisible(false);
+
+		JPanel panelCheckin = new PanelCheckin();
+		panelCheckin.setBounds(0, 0, 725, 669);
+		contentPanel.add(panelCheckin);
+
+		JPanel panelCheckout = new PanelCheckout(currentMaNV);
+		panelCheckout.setSize(725, 619);
+		contentPanel.add(panelCheckout);
+
+		panelAdjustInfo.setVisible(false);
 
 		// Main menu handler
-		menuPanelItem1.addMouseListener(new MouseAdapter() {
+		menuPanelInfo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				panelOne.setVisible(true);
-				panelTwo.setVisible(false);
-				panelThree.setVisible(false);
+				panelInfo.setVisible(true);
+				panelRoom.setVisible(false);
+				panelAdjustInfo.setVisible(false);
+				panelCheckout.setVisible(false);
+				panelCheckin.setVisible(false);
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menuPanelItem1.setBackground(new Color(246, 97, 81));
+				menuPanelInfo.setBackground(new Color(246, 97, 81));
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				menuPanelItem1.setBackground(new Color(36, 41, 49));
+				menuPanelInfo.setBackground(new Color(36, 41, 49));
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 
-		menuPanelItem2.addMouseListener(new MouseAdapter() {
+		menuPanelRoom.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				panelOne.setVisible(false);
-				panelTwo.setVisible(true);
-				panelThree.setVisible(false);
+				panelInfo.setVisible(false);
+				panelRoom.setVisible(true);
+				panelAdjustInfo.setVisible(false);
+				panelCheckout.setVisible(false);
+				panelCheckin.setVisible(false);
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menuPanelItem2.setBackground(new Color(246, 97, 81));
+				menuPanelRoom.setBackground(new Color(246, 97, 81));
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				menuPanelItem2.setBackground(new Color(36, 41, 49));
+				menuPanelRoom.setBackground(new Color(36, 41, 49));
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
 
-		menuPanelItem3.addMouseListener(new MouseAdapter() {
+		menuPanelCheckin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				panelOne.setVisible(false);
-				panelTwo.setVisible(false);
-				panelThree.setVisible(true);
+				panelInfo.setVisible(false);
+				panelRoom.setVisible(false);
+				panelAdjustInfo.setVisible(false);
+				panelCheckout.setVisible(false);
+
+				panelCheckin.setVisible(true);
+
+				refreshTable();
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menuPanelItem3.setBackground(new Color(246, 97, 81));
+				menuPanelCheckin.setBackground(new Color(246, 97, 81));
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				menuPanelItem3.setBackground(new Color(36, 41, 49));
+				menuPanelCheckin.setBackground(new Color(36, 41, 49));
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		menuPanelCheckout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelInfo.setVisible(false);
+				panelRoom.setVisible(false);
+				panelAdjustInfo.setVisible(false);
+				panelCheckout.setVisible(true);
+				panelCheckin.setVisible(false);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				menuPanelCheckout.setBackground(new Color(246, 97, 81));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				menuPanelCheckout.setBackground(new Color(36, 41, 49));
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+		});
+
+		menuPanelAdjustInfo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panelInfo.setVisible(false);
+				panelRoom.setVisible(false);
+				panelAdjustInfo.setVisible(true);
+				panelCheckout.setVisible(false);
+				panelCheckin.setVisible(false);
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				menuPanelAdjustInfo.setBackground(new Color(246, 97, 81));
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				menuPanelAdjustInfo.setBackground(new Color(36, 41, 49));
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			}
 		});
@@ -722,7 +834,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), tinhTrang, p.getGhiChu() });
 		}
 
-		panelTwo.setLayout(null);
+		panelRoom.setLayout(null);
 	}
 
 	private void refreshTable() {
@@ -874,30 +986,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			cboFilterGia.setSelectedIndex(0);
 			rowSorter.setRowFilter(null);
 			rowSorter.setSortKeys(null);
-		} else if (o.equals(btnInHoaDon)) {
-			int row = tbl.getSelectedRow();
-			Phong_DAO hotels = new Phong_DAO();
-
-			if (row != -1) {
-				FormInHoaDon form = new FormInHoaDon(model.getValueAt(row, 0).toString(), currentMaNV);
-				form.setVisible(true);
-
-				if (!form.isActive()) {
-					// Set lại trạng thái phòng
-					try {
-						hotels.editPhongByID(model.getValueAt(row, 0).toString(),
-								new Phong(model.getValueAt(row, 0).toString(), model.getValueAt(row, 1).toString(),
-										true, Double.parseDouble(model.getValueAt(row, 2).toString()),
-										model.getValueAt(row, 4).toString()));
-
-						refreshTable();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
-					}
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Chọn một phòng để in hóa đơn");
-			}
 		} else if (o.equals(btnShow)) {
 			isPasswordShown = !isPasswordShown;
 			if (isPasswordShown) {
@@ -915,7 +1003,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 					try {
 						NhanVien nv = nvDAO.getNhanVienByID(currentMaNV);
 						nv.setMatKhau(txtMatKhau.getText());
-						nv.setNgaySinh(nv.getNgaySinh().plusDays(2));
+						nv.setNgaySinh(nv.getNgaySinh());
 						nvDAO.editNhanVienByID(currentMaNV, nv);
 
 						JOptionPane.showMessageDialog(null, "Đã đổi mật khẩu thành công!");

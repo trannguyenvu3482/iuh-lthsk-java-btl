@@ -1,4 +1,4 @@
-package ui;
+package ui.forms;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import dao.NhanVien_DAO;
+import ui.gui.GUI_NhanVien;
 
 public class FormDangNhap extends JDialog implements ActionListener {
 	private JTextField txtMaNV;
