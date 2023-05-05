@@ -4,16 +4,14 @@ public class Phong {
 
     private String maPhong;
     private String maLoai;
-    private Boolean tinhTrang;
     private double giaPhong;
     private String ghiChu;
 
-    public Phong(String maPhong, String maLoai, Boolean tinhTrang, double giaPhong, String ghiChu) throws Exception {
+    public Phong(String maPhong, String maLoai, double giaPhong, String ghiChu) throws Exception {
 
         setMaPhong(maPhong);
         setMaLoai(maLoai);
         setGhiChu(ghiChu);
-        setTinhTrang(tinhTrang);
         setGiaPhong(giaPhong);
     }
 
@@ -43,14 +41,6 @@ public class Phong {
 
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
-    }
-
-    public Boolean getTinhTrang() {
-        return tinhTrang;
-    }
-
-    public void setTinhTrang(Boolean tinhTrang) {
-        this.tinhTrang = tinhTrang;
     }
 
     public double getGiaPhong() {

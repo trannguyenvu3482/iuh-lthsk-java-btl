@@ -2,25 +2,26 @@ package ui.panels;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import dao.Phong_DAO;
+import dao.TinhTrang_DAO;
 import entity.Phong;
+import ui.forms.FormKhachHang;
 
 public class PanelCheckin extends JPanel {
 	private JTable tbl;
 	private DefaultTableModel model;
 
-	public PanelCheckin() {
+	private String currentMaNV;
+
+	public PanelCheckin(String currentMaNV) {
+		this.currentMaNV = currentMaNV;
 		setBounds(0, 0, 725, 669);
 		setLayout(null);
 
@@ -35,6 +36,45 @@ public class PanelCheckin extends JPanel {
 		mainTitle.setHorizontalAlignment(SwingConstants.TRAILING);
 
 		createTable();
+
+		tbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = tbl.getSelectedRow();
+
+				if (row != -1) {
+					Phong_DAO hotels = new Phong_DAO();
+
+						FormKhachHang form = new FormKhachHang(model.getValueAt(row, 0).toString(), currentMaNV);
+						form.setVisible(true);
+
+						if (!form.isActive()) {
+							// Set lại trạng thái phòng
+							try {
+								refreshTable();
+							} catch (Exception ex) {
+								JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
+							}
+						}
+				} else {
+					JOptionPane.showMessageDialog(null, "Phải chọn một dòng");
+				}
+			}
+		});
+	}
+
+	public void refreshTable() {
+		Phong_DAO hotels = new Phong_DAO();
+		TinhTrang_DAO ttDao = new TinhTrang_DAO();
+		List<Phong> listPhong = hotels.getAllPhong();
+
+		// TODO: FIX THIS
+		model.setRowCount(0);
+		for (Phong p : listPhong) {
+			if (ttDao.getTinhTrangByID(p.getMaPhong()).getMaKH().equals("KH000")) {
+				model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), p.getGhiChu() });
+			}
+		}
 	}
 
 	private void createTable() {
@@ -55,8 +95,6 @@ public class PanelCheckin extends JPanel {
 		tbl.getColumnModel().getColumn(1).setPreferredWidth(120);
 		tbl.getColumnModel().getColumn(2).setPreferredWidth(120);
 		tbl.getColumnModel().getColumn(3).setPreferredWidth(80);
-		tbl.getColumnModel().getColumn(4).setPreferredWidth(80);
-		tbl.getColumnModel().getColumn(4).setPreferredWidth(80);
 		tbl.setRowHeight(30);
 
 		// Set font size of table
@@ -67,16 +105,6 @@ public class PanelCheckin extends JPanel {
 		tblPane_1.setBorder(BorderFactory.createTitledBorder("Thông tin các phòng"));
 		add(tblPane_1);
 
-		Phong_DAO hotels = new Phong_DAO();
-		List<Phong> list = hotels.getAllPhong();
-
-		for (Phong p : list) {
-			String tinhTrang = p.getTinhTrang() ? "Đã thuê" : "Còn trống";
-
-			if (tinhTrang.equals("Đã thuê")) {
-				model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), tinhTrang, p.getGhiChu() });
-			}
-		}
-
+		refreshTable();
 	}
 }

@@ -29,8 +29,8 @@ public class TinhTrang_DAO {
 			while (rs.next()) {
 				String maPhong = rs.getString("maPhong");
 				String maKH = rs.getString("maKH");
-				LocalDate ngayDat = rs.getDate("ngayDat").toLocalDate();
-				LocalDate ngayTra = rs.getDate("ngayTra").toLocalDate();
+				LocalDate ngayDat = rs.getDate("ngayDat") == null ? null : rs.getDate("ngayDat").toLocalDate();
+				LocalDate ngayTra = rs.getDate("ngayTra") == null ? null : rs.getDate("ngayTra").toLocalDate();
 
 				list.add(new TinhTrang(maPhong, maKH, ngayDat, ngayTra));
 			}
@@ -42,15 +42,40 @@ public class TinhTrang_DAO {
 		return list;
 	}
 
+	public TinhTrang getTinhTrangByID(String idPhong) {
+		try {
+			Connection conn = ConnectDB.getConnection();
+
+			String sql = "SELECT * FROM TinhTrang WHERE maPhong = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, idPhong);
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String maKH = rs.getString("maKH");
+				LocalDate ngayDat = rs.getDate("ngayDat") == null ? null : rs.getDate("ngayDat").toLocalDate();
+				LocalDate ngayTra = rs.getDate("ngayTra") == null ? null : rs.getDate("ngayTra").toLocalDate();
+
+				return new TinhTrang(maPhong, maKH, ngayDat, ngayTra);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public boolean editTinhTrang(String maPhong, TinhTrang tinhTrang) {
 		try {
 			Connection conn = ConnectDB.getConnection();
 
-			String sql = "UPDATE KhachHang SET maKH = ?, ngayDat = ?, ngayTra = ?, WHERE maPhong = ?";
+			String sql = "UPDATE TinhTrang SET maKH = ?, ngayDat = ?, ngayTra = ? WHERE maPhong = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, tinhTrang.getMaKH());
-			stmt.setDate(2, java.sql.Date.valueOf(tinhTrang.getNgayDat()));
-			stmt.setDate(3, java.sql.Date.valueOf(tinhTrang.getNgayTra()));
+			stmt.setDate(2, tinhTrang.getNgayDat() == null ? null : java.sql.Date.valueOf(tinhTrang.getNgayDat()));
+			stmt.setDate(3, tinhTrang.getNgayTra() == null ? null :  java.sql.Date.valueOf(tinhTrang.getNgayTra()));
 			stmt.setString(4, maPhong);
 
 			stmt.executeUpdate();

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
+import java.sql.Date;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,15 +21,13 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-import dao.HoaDon_DAO;
-import dao.KhachHang_DAO;
-import dao.LoaiPhong_DAO;
-import dao.Phong_DAO;
+import dao.*;
 import entity.HoaDon;
 import entity.KhachHang;
 import entity.Phong;
+import entity.TinhTrang;
 
-public class FormInHoaDon extends JDialog implements ActionListener {
+public class FormKhachHang extends JDialog implements ActionListener {
     private String idPhong;
 
     private String currentMaKH;
@@ -38,16 +37,16 @@ public class FormInHoaDon extends JDialog implements ActionListener {
     private JTextField txtNgaySinh;
     private JTextField txtSDT;
     private JTextField txtCCCD;
-    private JButton btnInHoaDon = new JButton("In hóa đơn");
+    private JButton btnInHoaDon = new JButton("Check-in");
     private JButton btnKiemTraKhachHang = new JButton("Kiểm tra");
-    private JButton btnInHoaDon_2 = new JButton("In hóa đơn");
+    private JButton btnInHoaDon_2 = new JButton("Check-in");
     private JTextField txtCCCD_1;
     private JTextField txtMaKH_2;
     private JTextField txtHoTen_2;
     private JTextField txtSDT_2;
 
-    public FormInHoaDon(String idPhong, String maNV) {
-        this.setTitle("In hóa đơn cho phòng " + idPhong);
+    public FormKhachHang(String idPhong, String maNV) {
+        this.setTitle("Checkin cho phòng " + idPhong);
         this.setModal(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(600, 360);
@@ -270,94 +269,20 @@ public class FormInHoaDon extends JDialog implements ActionListener {
     }
 
     @SuppressWarnings("resource")
-    public void writeFileHoaDon(KhachHang k, Phong p, Boolean isNewKhachHang) {
+    public void handleCheckin(KhachHang k, String maPhong, Boolean isNewKhachHang) {
         try {
-            HoaDon_DAO hoaDonDAO = new HoaDon_DAO();
-            int countHoaDon = hoaDonDAO.countHoaDon();
-            String maHD = "";
+            int days = Integer.parseInt(JOptionPane.showInputDialog(null, "Nhập số ngày thuê: "));
 
-            if (countHoaDon == 0) {
-                maHD = "HD001";
-            } else {
-                maHD = "HD" + String.format("%03d", countHoaDon + 1);
+
+            if (Boolean.TRUE.equals(isNewKhachHang)) {
+                KhachHang_DAO khDAO = new KhachHang_DAO();
+                khDAO.addKhachHang(k);
             }
 
-            File file = new File("./src/txt/HoaDon" + maHD + ".txt");
-            FileWriter fw = new FileWriter(file);
-
-            if (file.exists()) {
-                LoaiPhong_DAO loaiPhongDAO = new LoaiPhong_DAO();
-                KhachHang_DAO khachHangDAO = new KhachHang_DAO();
-
-                String maLoai = p.getMaLoai();
-
-                String loaiPhong = loaiPhongDAO.getLoaiPhongByID(maLoai).getTenLoai();
-                String chatLuong = loaiPhongDAO.getLoaiPhongByID(maLoai).getChatLuong();
-
-                HoaDon hd = new HoaDon(maHD, idPhong, maNV, k.getMaKH(), p.getGiaPhong(), LocalDate.now());
-
-                if (Boolean.TRUE.equals(isNewKhachHang)) {
-                    if ( !khachHangDAO.checkKhachHangByID(k.getMaKH())) {
-                        khachHangDAO.addKhachHang(k);
-                    } else {
-                        throw new Exception("Khách hàng đã tồn tại");
-                    }
-                }
-
-                hoaDonDAO.addNewHoaDon(hd);
-
-                fw.write("Hóa đơn thuê phòng: ");
-                fw.write("\n");
-
-                fw.write("Mã hóa đơn: " + hd.getMaHD());
-                fw.write("\n");
-
-                fw.write("----------------------------------------");
-                fw.write("\n");
-
-                fw.write("Mã khách hàng: " + hd.getMaKH());
-                fw.write("\n");
-
-                fw.write("Họ tên khách hàng: " + k.getTenKH());
-                fw.write("\n");
-
-                fw.write("Ngày sinh: " + k.getNgaySinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                fw.write("\n");
-
-                fw.write("Số điện thoại: " + k.getSDT());
-                fw.write("\n");
-
-                fw.write("Số CCCD: " + k.getCCCD());
-                fw.write("\n");
-
-                fw.write("----------------------------------------");
-                fw.write("\n");
-
-                fw.write("Mã phòng: " + hd.getMaPhong());
-                fw.write("\n");
-
-                fw.write("Loại phòng: " + loaiPhong);
-                fw.write("\n");
-
-                fw.write("Chất lượng: " + chatLuong);
-                fw.write("\n");
-
-                NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-
-                fw.write("Giá phòng: " + nf.format(hd.getTongTien()));
-                fw.write("\n");
-
-                fw.write("----------------------------------------");
-                fw.write("\n");
-
-                fw.write("Ngày thuê: " + hd.getNgayTaoHD().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-                JOptionPane.showMessageDialog(null, "In hóa đơn thành công");
-                fw.close();
-                dispose();
-            } else {
-                file.createNewFile();
-            }
+            TinhTrang_DAO ttDAO = new TinhTrang_DAO();
+            ttDAO.editTinhTrang(maPhong, new TinhTrang(maPhong, k.getMaKH(), LocalDate.now(), LocalDate.now().plusDays(days)));
+            JOptionPane.showMessageDialog(null, "Checkin thành công!");
+            dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } finally {
@@ -386,10 +311,10 @@ public class FormInHoaDon extends JDialog implements ActionListener {
                     }
                 }
 
-                writeFileHoaDon(
+                handleCheckin(
                         new KhachHang(maKH, hoTenKH,
                                 LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern("dd/MM/yyyy")), sdt, cccd),
-                        phongDAO.getPhongByID(idPhong), true);
+                        idPhong, true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());
             }
@@ -419,8 +344,8 @@ public class FormInHoaDon extends JDialog implements ActionListener {
                 if (currentMaKH == null) {
                     throw new Exception("Chưa kiểm tra khách hàng");
                 } else {
-                    writeFileHoaDon(new KhachHang_DAO().getKhachHangByID(currentMaKH),
-                            new Phong_DAO().getPhongByID(idPhong), false);
+                    handleCheckin(new KhachHang_DAO().getKhachHangByID(currentMaKH),
+                            idPhong, false);
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage());

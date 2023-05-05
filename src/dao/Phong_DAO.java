@@ -18,21 +18,19 @@ public class Phong_DAO {
         ArrayList<Phong> dsPhong = new ArrayList<>();
 
         try {
-            ConnectDB.getInstance();
             Connection con = ConnectDB.getConnection();
 
-            String sql = "SELECT * FROM Phong";
+            String sql = "SELECT maPhong, maLoai, giaPhong, ghiChu FROM Phong";
             Statement statement = con.createStatement();
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
                 String maPhong = rs.getString("maPhong");
                 String maLoai = rs.getString("maLoai");
-                boolean tinhTrang = rs.getBoolean("tinhTrang");
                 double giaPhong = rs.getDouble("giaPhong");
                 String ghiChu = rs.getString("ghiChu");
 
-                Phong phong = new Phong(maPhong, maLoai, tinhTrang, giaPhong, ghiChu);
+                Phong phong = new Phong(maPhong, maLoai, giaPhong, ghiChu);
                 dsPhong.add(phong);
             }
 
@@ -45,7 +43,6 @@ public class Phong_DAO {
 
     public Phong getPhongByID(String ID) {
         Connection conn = ConnectDB.getConnection();
-        Phong h;
 
         try {
             String sql = "SELECT * FROM Phong WHERE maPhong = ?";
@@ -57,10 +54,9 @@ public class Phong_DAO {
                 String maPhong = rs.getString("maPhong");
                 String maLoai = rs.getString("maLoai");
                 double giaPhong = rs.getDouble("giaPhong");
-                boolean tinhTrang = rs.getBoolean("tinhTrang");
                 String ghiChu = rs.getString("ghiChu");
 
-                return new Phong(maPhong, maLoai, tinhTrang, giaPhong, ghiChu);
+                return new Phong(maPhong, maLoai, giaPhong, ghiChu);
             } else {
                 return null;
             }
@@ -79,8 +75,8 @@ public class Phong_DAO {
         stm.setString(1, p.getMaPhong());
         stm.setString(2, p.getMaLoai());
         stm.setDouble(3, p.getGiaPhong());
-        stm.setBoolean(4, p.getTinhTrang());
-        stm.setString(5, p.getGhiChu());
+        stm.setString(4, p.getGhiChu());
+        stm.setInt(5, 0);
 
         stm.executeUpdate();
     }
@@ -88,13 +84,12 @@ public class Phong_DAO {
     public boolean editPhongByID(String ID, Phong p) {
         Connection conn = ConnectDB.getConnection();
         try {
-            String sql = "UPDATE Phong SET maLoai = ?, giaPhong = ?, tinhTrang = ?, ghiChu = ? WHERE maPhong = ?";
+            String sql = "UPDATE Phong SET maLoai = ?, giaPhong = ?, ghiChu = ? WHERE maPhong = ?";
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1, p.getMaLoai());
             stm.setDouble(2, p.getGiaPhong());
-            stm.setBoolean(3, p.getTinhTrang());
-            stm.setString(4, p.getGhiChu());
-            stm.setString(5, ID);
+            stm.setString(3, p.getGhiChu());
+            stm.setString(4, ID);
             stm.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

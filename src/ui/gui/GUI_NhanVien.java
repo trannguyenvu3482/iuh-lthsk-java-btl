@@ -20,7 +20,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -60,7 +59,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JComboBox<String> cboFilterLoaiPhong = new JComboBox<String>();
 	private final JComboBox<String> cboFilterTinhTrang = new JComboBox<String>();
 	private final JComboBox<String> cboFilterGia = new JComboBox<String>();
-	private final JCheckBox chkDatPhong = new JCheckBox("");
 	private final JLabel lblMaPhong = new JLabel("Mã phòng: ");
 	private final JLabel lblLoaiPhong = new JLabel("Loại phòng: ");
 	private final JLabel lblGiaPhong = new JLabel("Giá phòng: ");
@@ -222,8 +220,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		tbl.getColumnModel().getColumn(1).setPreferredWidth(120);
 		tbl.getColumnModel().getColumn(2).setPreferredWidth(120);
 		tbl.getColumnModel().getColumn(3).setPreferredWidth(80);
-		tbl.getColumnModel().getColumn(4).setPreferredWidth(80);
-		tbl.getColumnModel().getColumn(4).setPreferredWidth(80);
 		tbl.setRowHeight(30);
 
 		// Set font size of table
@@ -236,18 +232,11 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				String maLoai = tbl.getValueAt(tbl.getSelectedRow(), 1).toString();
 				int row = tbl.getSelectedRow();
 
-				if (tbl.getValueAt(row, 3).equals("Đã thuê")) {
-					chkDatPhong.setSelected(true);
-				} else {
-					chkDatPhong.setSelected(false);
-				}
-
 				txtMaPhong.setText(tbl.getValueAt(row, 0).toString());
 				cboLoaiPhong.setSelectedItem(lpDAO.getLoaiPhongByID(maLoai).getTenLoai());
 				cboChatLuong.setSelectedItem(lpDAO.getLoaiPhongByID(maLoai).getChatLuong());
 				txtGiaPhong.setText(tbl.getValueAt(row, 2).toString());
-				txtGhiChu.setText(tbl.getValueAt(row, 4).toString());
-
+				txtGhiChu.setText(tbl.getValueAt(row, 3).toString());
 			}
 		});
 
@@ -442,11 +431,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(10);
 		b2.add(horizontalStrut_1);
 
-		JLabel lblDatPhong = new JLabel("Đã đặt:");
-		lblDatPhong.setFont(new Font("Dialog", Font.PLAIN, 14));
-		b2.add(lblDatPhong);
 
-		b2.add(chkDatPhong);
 		cboFilterChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
 		cboFilterLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 15));
 		cboFilterTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
@@ -678,11 +663,11 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		txtCCCD.setColumns(20);
 		b12_2.add(txtCCCD);
 
-		JPanel panelCheckin = new PanelCheckin();
+		PanelCheckin panelCheckin = new PanelCheckin(currentMaNV);
 		panelCheckin.setBounds(0, 0, 725, 669);
 		contentPanel.add(panelCheckin);
 
-		JPanel panelCheckout = new PanelCheckout(currentMaNV);
+		PanelCheckout panelCheckout = new PanelCheckout(currentMaNV);
 		panelCheckout.setSize(725, 619);
 		contentPanel.add(panelCheckout);
 
@@ -744,6 +729,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				panelCheckout.setVisible(false);
 
 				panelCheckin.setVisible(true);
+				panelCheckin.refreshTable();
 
 				refreshTable();
 			}
@@ -768,6 +754,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				panelRoom.setVisible(false);
 				panelAdjustInfo.setVisible(false);
 				panelCheckout.setVisible(true);
+				panelCheckout.refreshTable();
 				panelCheckin.setVisible(false);
 			}
 
@@ -813,7 +800,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	// Prevent editing on all cells
 	private void createTable() {
 
-		String[] tblCols = { "Mã phòng", "Mã loại phòng", "Giá phòng", "Tình trạng", "Ghi chú" };
+		String[] tblCols = { "Mã phòng", "Mã loại phòng", "Giá phòng", "Ghi chú" };
 		model = new DefaultTableModel(tblCols, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -830,8 +817,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		List<Phong> list = hotels.getAllPhong();
 
 		for (Phong p : list) {
-			String tinhTrang = p.getTinhTrang() ? "Đã thuê" : "Còn trống";
-			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), tinhTrang, p.getGhiChu() });
+			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), p.getGiaPhong(), p.getGhiChu() });
 		}
 
 		panelRoom.setLayout(null);
@@ -843,9 +829,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		List<Phong> list = hotels.getAllPhong();
 
 		for (Phong p : list) {
-			String tinhTrang = p.getTinhTrang() ? "Đã thuê" : "Còn trống";
-			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), tinhTrang,
-					p.getGhiChu() });
+			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), p.getGhiChu() });
 		}
 	}
 
@@ -883,7 +867,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 				if (!txtGiaPhong.getText().matches("\\d+(\\.\\d+)?"))
 					throw new Exception("Giá phòng phải là số");
 
-				Phong p = new Phong(txtMaPhong.getText(), "L001", false, Double.parseDouble(txtGiaPhong.getText()),
+				Phong p = new Phong(txtMaPhong.getText(), "L001", Double.parseDouble(txtGiaPhong.getText()),
 						txtGhiChu.getText());
 
 				hotels.addPhong(p);
@@ -920,7 +904,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 					if (!txtGiaPhong.getText().matches("\\d+(\\.\\d+)?"))
 						throw new Exception("Giá phòng phải là số");
 
-					Phong p = new Phong(txtMaPhong.getText(), maLoai, chkDatPhong.isSelected(),
+					Phong p = new Phong(txtMaPhong.getText(), maLoai,
 							Double.parseDouble(txtGiaPhong.getText()), txtGhiChu.getText());
 
 					hotels.editPhongByID(model.getValueAt(row, 0).toString(), p);
