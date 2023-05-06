@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -30,15 +29,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 import dao.LoaiPhong_DAO;
 import dao.NhanVien_DAO;
@@ -55,10 +50,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JTextField txtGhiChu = new JTextField();
 	private final JComboBox<String> cboChatLuong = new JComboBox<String>();
 	private final JComboBox<String> cboLoaiPhong = new JComboBox<String>();
-	private final JComboBox<String> cboFilterChatLuong = new JComboBox<String>();
-	private final JComboBox<String> cboFilterLoaiPhong = new JComboBox<String>();
-	private final JComboBox<String> cboFilterTinhTrang = new JComboBox<String>();
-	private final JComboBox<String> cboFilterGia = new JComboBox<String>();
 	private final JLabel lblMaPhong = new JLabel("Mã phòng: ");
 	private final JLabel lblLoaiPhong = new JLabel("Loại phòng: ");
 	private final JLabel lblGiaPhong = new JLabel("Giá phòng: ");
@@ -70,7 +61,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private final JButton btnLuu = new JButton("Lưu");
 	private final JButton btnHuy = new JButton("Xóa trắng");
 	private final JButton btnTimKiem = new JButton("Tìm kiếm");
-	private final JButton btnClearBoLoc = new JButton("Xóa bộ lọc");
 	private final JButton btnXacNhan_1 = new JButton("Xác nhận");
 	private final JButton btnShow = new JButton("");
 	private boolean isPasswordShown = false;
@@ -78,7 +68,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 	private JTable tbl;
 	private DefaultTableModel model;
 
-	private TableRowSorter<DefaultTableModel> rowSorter;
 	private final JTextField txtMaNV_2;
 	private final JTextField txtSDT_2;
 	private final JTextField txtMaNV_1;
@@ -130,7 +119,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		JPanel menuPanelInfo = new JPanel();
 		menuPanelInfo.setBackground(new Color(36, 31, 49));
-		menuPanelInfo.setBounds(0, 34, 271, 80);
+		menuPanelInfo.setBounds(0, 30, 271, 80);
 		menuPanel.add(menuPanelInfo);
 		menuPanelInfo.setLayout(new BorderLayout(0, 0));
 
@@ -145,11 +134,12 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		JPanel menuPanelRoom = new JPanel();
 		menuPanelRoom.setForeground(Color.WHITE);
 		menuPanelRoom.setBackground(new Color(36, 31, 49));
-		menuPanelRoom.setBounds(0, 140, 271, 80);
+		menuPanelRoom.setBounds(0, 130, 271, 80);
 		menuPanel.add(menuPanelRoom);
 		menuPanelRoom.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblQunLPhng_2 = new JLabel("Quản lý phòng");
+		lblQunLPhng_2.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/magnify-icon.png")));
 		lblQunLPhng_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQunLPhng_2.setForeground(Color.WHITE);
 		lblQunLPhng_2.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -158,12 +148,12 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		JPanel menuPanelCheckin = new JPanel();
 		menuPanelCheckin.setForeground(new Color(255, 255, 255));
 		menuPanelCheckin.setBackground(new Color(36, 31, 49));
-		menuPanelCheckin.setBounds(0, 240, 271, 80);
+		menuPanelCheckin.setBounds(0, 230, 271, 80);
 		menuPanel.add(menuPanelCheckin);
 		menuPanelCheckin.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblQunLPhng = new JLabel("Check-in");
-		lblQunLPhng.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/magnify-icon.png")));
+		lblQunLPhng.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/door-closed-custom.png")));
 		lblQunLPhng.setForeground(new Color(255, 255, 255));
 		lblQunLPhng.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQunLPhng.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -172,11 +162,12 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		JPanel menuPanelCheckout = new JPanel();
 		menuPanelCheckout.setForeground(Color.WHITE);
 		menuPanelCheckout.setBackground(new Color(36, 31, 49));
-		menuPanelCheckout.setBounds(0, 335, 271, 80);
+		menuPanelCheckout.setBounds(0, 330, 271, 80);
 		menuPanel.add(menuPanelCheckout);
 		menuPanelCheckout.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblCheckout = new JLabel("Check-out");
+		lblCheckout.setIcon(new ImageIcon(GUI_NhanVien.class.getResource("/images/door-open-custom.png")));
 		lblCheckout.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCheckout.setForeground(Color.WHITE);
 		lblCheckout.setFont(new Font("Dialog", Font.BOLD, 20));
@@ -184,7 +175,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		JPanel menuPanelAdjustInfo = new JPanel();
 		menuPanelAdjustInfo.setBackground(new Color(36, 31, 49));
-		menuPanelAdjustInfo.setBounds(0, 440, 271, 80);
+		menuPanelAdjustInfo.setBounds(0, 430, 271, 80);
 		menuPanel.add(menuPanelAdjustInfo);
 		menuPanelAdjustInfo.setLayout(new BorderLayout(0, 0));
 
@@ -197,7 +188,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		JLabel lblNhm = new JLabel("Welcome, " + currentMaNV);
 		lblNhm.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNhm.setBounds(0, 630, 271, 28);
+		lblNhm.setBounds(0, 620, 271, 28);
 		leftPanel.add(lblNhm);
 		lblNhm.setFont(new Font("Dialog", Font.BOLD, 20));
 
@@ -361,45 +352,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b7.add(Box.createHorizontalStrut(10));
 		b7.add(btnTimKiem);
 		b7.add(Box.createHorizontalStrut(10));
-		b7.add(btnClearBoLoc);
-		b7.add(Box.createHorizontalStrut(10));
-
-		b8.setBorder(BorderFactory.createTitledBorder("Bộ lọc"));
-		cboFilterLoaiPhong.addItem("Phòng đơn");
-		cboFilterLoaiPhong.addItem("Phòng đôi");
-
-		cboFilterChatLuong.addItem("Thường");
-		cboFilterChatLuong.addItem("Cao cấp");
-
-		JLabel lblNewLabel = new JLabel("Loại phòng: ");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		b8.add(lblNewLabel);
-		b8.add(cboFilterLoaiPhong);
-		b8.add(Box.createHorizontalStrut(10));
-
-		JLabel lblNewLabel_1 = new JLabel("Chất lượng: ");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		b8.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("Tình trạng: ");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		b8.add(cboFilterChatLuong);
-		b8.add(Box.createHorizontalStrut(10));
-		b8.add(lblNewLabel_2);
-
-		cboFilterTinhTrang.addItem("Còn trống");
-		cboFilterTinhTrang.addItem("Đã thuê");
-		b8.add(cboFilterTinhTrang);
-		b8.add(Box.createHorizontalStrut(10));
-
-		JLabel lblNewLabel_3 = new JLabel("Giá: ");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		b8.add(lblNewLabel_3);
-		cboFilterGia.setFont(new Font("Tahoma", Font.PLAIN, 15));
-
-		cboFilterGia.addItem("Tăng");
-		cboFilterGia.addItem("Giảm");
-		b8.add(cboFilterGia);
 
 		b.add(b1);
 		b.add(Box.createVerticalStrut(10));
@@ -410,7 +362,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		b.add(b6);
 		b.add(Box.createVerticalStrut(10));
 		b.add(b7);
-		b.add(b8);
 		b.add(Box.createVerticalStrut(20));
 
 		// Set font of labels
@@ -431,18 +382,12 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		Component horizontalStrut_1 = Box.createHorizontalStrut(10);
 		b2.add(horizontalStrut_1);
 
-
-		cboFilterChatLuong.setFont(new Font("Arial", Font.PLAIN, 15));
-		cboFilterLoaiPhong.setFont(new Font("Arial", Font.PLAIN, 15));
-		cboFilterTinhTrang.setFont(new Font("Arial", Font.PLAIN, 15));
-
 		// Button font size
 		btnThem.setFont(new Font("Arial", Font.BOLD, 15));
 		btnXoa.setFont(new Font("Arial", Font.BOLD, 15));
 		btnLuu.setFont(new Font("Arial", Font.BOLD, 15));
 		btnHuy.setFont(new Font("Arial", Font.BOLD, 15));
 		btnTimKiem.setFont(new Font("Arial", Font.BOLD, 15));
-		btnClearBoLoc.setFont(new Font("Arial", Font.BOLD, 15));
 
 		inputPanel.add(b);
 		panelRoom.setVisible(false);
@@ -457,14 +402,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		btnLuu.addActionListener(this);
 		btnHuy.addActionListener(this);
 		btnTimKiem.addActionListener(this);
-		btnClearBoLoc.addActionListener(this);
 		btnXacNhan_1.addActionListener(this);
-
-		// Filter handler
-		cboFilterLoaiPhong.addActionListener(this);
-		cboFilterChatLuong.addActionListener(this);
-		cboFilterTinhTrang.addActionListener(this);
-		cboFilterGia.addActionListener(this);
 
 		contentPanel.add(panelAdjustInfo);
 		panelAdjustInfo.setLayout(new BoxLayout(panelAdjustInfo, BoxLayout.Y_AXIS));
@@ -672,6 +610,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		contentPanel.add(panelCheckout);
 
 		panelAdjustInfo.setVisible(false);
+		panelCheckin.setVisible(false);
+		panelCheckout.setVisible(false);
 
 		// Main menu handler
 		menuPanelInfo.addMouseListener(new MouseAdapter() {
@@ -810,9 +750,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 
 		tbl = new JTable(model);
 
-		rowSorter = new TableRowSorter<>(model);
-		tbl.setRowSorter(rowSorter);
-
 		Phong_DAO hotels = new Phong_DAO();
 		List<Phong> list = hotels.getAllPhong();
 
@@ -829,7 +766,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		List<Phong> list = hotels.getAllPhong();
 
 		for (Phong p : list) {
-			model.addRow(new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), p.getGhiChu() });
+			model.addRow(
+					new Object[] { p.getMaPhong(), p.getMaLoai(), Double.toString(p.getGiaPhong()), p.getGhiChu() });
 		}
 	}
 
@@ -904,8 +842,8 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 					if (!txtGiaPhong.getText().matches("\\d+(\\.\\d+)?"))
 						throw new Exception("Giá phòng phải là số");
 
-					Phong p = new Phong(txtMaPhong.getText(), maLoai,
-							Double.parseDouble(txtGiaPhong.getText()), txtGhiChu.getText());
+					Phong p = new Phong(txtMaPhong.getText(), maLoai, Double.parseDouble(txtGiaPhong.getText()),
+							txtGhiChu.getText());
 
 					hotels.editPhongByID(model.getValueAt(row, 0).toString(), p);
 					clearInputs();
@@ -940,36 +878,6 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(null, "Mã phòng không được để trống");
 			}
-		} else if (o.equals(cboFilterLoaiPhong) || o.equals(cboFilterChatLuong)) {
-			LoaiPhong_DAO loaiPhongDAO = new LoaiPhong_DAO();
-
-			String maLoai = loaiPhongDAO.getMaFromLoai(cboFilterLoaiPhong.getSelectedItem().toString(),
-					cboFilterChatLuong.getSelectedItem().toString());
-
-			rowSorter.setRowFilter(RowFilter.regexFilter(maLoai, 1));
-		} else if (o.equals(cboFilterTinhTrang)) {
-			if (cboFilterTinhTrang.getSelectedIndex() == 0) {
-				rowSorter.setRowFilter(RowFilter.regexFilter("Còn trống", 3));
-			} else {
-				rowSorter.setRowFilter(RowFilter.regexFilter("Đã thuê", 3));
-			}
-		} else if (o.equals(cboFilterGia)) {
-			List<RowSorter.SortKey> sortKeys = new ArrayList<>(25);
-
-			if (cboFilterGia.getSelectedIndex() == 0) {
-				sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
-			} else if (cboFilterGia.getSelectedIndex() == 1) {
-				sortKeys.add(new RowSorter.SortKey(2, SortOrder.DESCENDING));
-			}
-
-			rowSorter.setSortKeys(sortKeys);
-		} else if (o.equals(btnClearBoLoc)) {
-			cboFilterLoaiPhong.setSelectedIndex(0);
-			cboFilterChatLuong.setSelectedIndex(0);
-			cboFilterTinhTrang.setSelectedIndex(0);
-			cboFilterGia.setSelectedIndex(0);
-			rowSorter.setRowFilter(null);
-			rowSorter.setSortKeys(null);
 		} else if (o.equals(btnShow)) {
 			isPasswordShown = !isPasswordShown;
 			if (isPasswordShown) {
