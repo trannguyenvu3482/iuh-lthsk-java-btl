@@ -36,8 +36,10 @@ import javax.swing.table.TableRowSorter;
 import dao.HoaDon_DAO;
 import entity.HoaDon;
 import ui.forms.HoaDonDialog;
+import ui.forms.TopKhachHangDialog;
+import ui.forms.TopPhongDialog;
 
-public class PanelThree extends JPanel implements ActionListener {
+public class PanelThongKe extends JPanel implements ActionListener {
 	private String soLuongHD;
 	private double tongTien;
 	private JTable tbl;
@@ -49,9 +51,10 @@ public class PanelThree extends JPanel implements ActionListener {
 	private JLabel lblSoLuongHoaDon = new JLabel("");
 
 	private JLabel lblTongTien = new JLabel("");
-
 	private JButton btnXoaBoLoc = new JButton("Xóa mọi bộ lọc");
+	private JButton btnXemTopKH = new JButton("Xem top khách hàng");
 
+	private JButton btnXemTopPhong = new JButton("Xem top phòng được đặt nhiều nhất");
 	private TableRowSorter<DefaultTableModel> rowSorter;
 
 	private RowFilter<DefaultTableModel, Integer> dateFilter = null;
@@ -60,7 +63,7 @@ public class PanelThree extends JPanel implements ActionListener {
 
 	private RowFilter<DefaultTableModel, Integer> staffFilter = null;
 
-	public PanelThree() {
+	public PanelThongKe() {
 		// TODO Auto-generated constructor stub
 		setBounds(0, 0, 925, 569);
 		setBackground(UIManager.getColor("Button.background"));
@@ -151,6 +154,12 @@ public class PanelThree extends JPanel implements ActionListener {
 
 		btnXoaBoLoc.setFont(new Font("Dialog", Font.BOLD, 15));
 		boxBtn.add(btnXoaBoLoc);
+
+		btnXemTopKH.setFont(new Font("Dialog", Font.BOLD, 15));
+		boxBtn.add(btnXemTopKH);
+
+		btnXemTopPhong.setFont(new Font("Dialog", Font.BOLD, 15));
+		boxBtn.add(btnXemTopPhong);
 
 		Component verticalStrut_1_2 = Box.createVerticalStrut(20);
 		b.add(verticalStrut_1_2);
@@ -473,6 +482,10 @@ public class PanelThree extends JPanel implements ActionListener {
 			txtPhong.setText("");
 			txtNhanVien.setText("");
 			rowSorter.setRowFilter(null);
+		} else if (e.getSource().equals(btnXemTopKH)) {
+			new TopKhachHangDialog().setVisible(true);
+		} else if (e.getSource().equals(btnXemTopPhong)) {
+			new TopPhongDialog().setVisible(true);
 		}
 	}
 }

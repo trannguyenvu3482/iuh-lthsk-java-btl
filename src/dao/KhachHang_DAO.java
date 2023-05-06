@@ -77,6 +77,30 @@ public class KhachHang_DAO {
 		return null;
 	}
 
+	public List<KhachHang> getTopKhachHang() {
+		List<KhachHang> dsKhachHang = new ArrayList<>();
+		try {
+			Connection conn = ConnectDB.getConnection();
+			String sql = "SELECT TOP 5 * FROM KhachHang ORDER BY tongTien DESC";
+			PreparedStatement stm = conn.prepareStatement(sql);
+			ResultSet rs = stm.executeQuery();
+
+			while (rs.next()) {
+				String maKH = rs.getString("maKH");
+				String tenKH = rs.getString("hoTenKH");
+				LocalDate ngaySinh = rs.getDate("ngaySinh").toLocalDate();
+				String SDT = rs.getString("SDT");
+				String CCCD = rs.getString("CCCD");
+
+				KhachHang kh = new KhachHang(maKH, tenKH, ngaySinh, SDT, CCCD);
+				dsKhachHang.add(kh);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dsKhachHang;
+	}
+
 	public boolean checkKhachHangByID(String ID) throws Exception {
 		Connection conn = ConnectDB.getConnection();
 		String sql = "SELECT * FROM KhachHang WHERE maKH = ?";

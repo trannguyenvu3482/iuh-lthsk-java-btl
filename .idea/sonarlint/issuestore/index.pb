@@ -27,22 +27,12 @@ L
 src/connectDB/ConnectDB.java,8/4/848d75c56c43a9b71570cec4a58c2d55608da153
 =
 BaiTapLon.iml,a/d/ad52e5407ed8c92b8ee64f45e772e701392fbf69
-N
-src/ui/forms/FormDangNhap.java,f/6/f6b7c8a64ceb644b19552a09d4ecb735af02ae05
-J
-src/dao/KhachHang_DAO.java,0/a/0a95f73df5c1b5f1c6667c01cad1b80b34d4470f
-M
-src/ui/panels/PanelThree.java,a/6/a615d2e2c4f2c9712f5b3e48bd9b3b831831f43e
 I
 src/entity/TinhTrang.java,c/e/ce139ff0778576d42fb6f0382dbee7474a93c0c4
 H
 src/entity/NhanVien.java,e/e/ee735206659a872bf7683d37f597c65fe9ca4dd0
 N
 src/ui/forms/HoaDonDialog.java,6/4/64070640f15ce17b1ace7b4c04960379be216782
-G
-src/ui/Application.java,6/2/62b70c836cfb8e26159edd364a6254fac283fffb
-J
-src/ui/gui/GUI_QuanLy.java,b/9/b9bcefcb251f9cf3545dbbd16006beb9a3e2d871
 G
 src/dao/HoaDon_DAO.java,8/e/8e2729aaf1a07c0c9af74ecbdfde33ecba4d3aa5
 O
@@ -51,7 +41,5 @@ P
  src/ui/panels/PanelCheckout.java,8/6/86b6c39eb6b237dbc1e9de7fccbbbbef8cf39be5
 E
 src/entity/Phong.java,5/a/5a3067f957392c8138db257d278ea9e43382ca62
-F
-src/dao/Phong_DAO.java,8/4/84157c9d1b4f8f086a6d71e4a1033e4bf151a609
 J
 src/dao/TinhTrang_DAO.java,5/9/59492d4347f0fcf76fa7c7b5900512c04a5d80b5

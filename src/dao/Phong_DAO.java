@@ -1,12 +1,14 @@
 package dao;
 
 import connectDB.ConnectDB;
+import entity.KhachHang;
 import entity.Phong;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +67,29 @@ public class Phong_DAO {
         }
 
         return null;
+    }
+
+    public List<Phong> getTopPhong() {
+        List<Phong> dsPhong = new ArrayList<>();
+        try {
+            Connection conn = ConnectDB.getConnection();
+            String sql = "SELECT TOP 5 * FROM Phong ORDER BY soLanDatPhong DESC";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String maPhong = rs.getString("maPhong");
+                String maLoai = rs.getString("maLoai");
+                double giaPhong = rs.getDouble("giaPhong");
+                String ghiChu = rs.getString("ghiChu");
+
+                Phong phong = new Phong(maPhong, maLoai, giaPhong, ghiChu);
+                dsPhong.add(phong);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dsPhong;
     }
 
     public void addPhong(Phong p) throws Exception {

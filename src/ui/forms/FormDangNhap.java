@@ -40,6 +40,7 @@ public class FormDangNhap extends JDialog implements ActionListener {
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setModal(true);
+		setIconImage(new ImageIcon(GUI_NhanVien.class.getResource("/images/hotels-icon.png")).getImage());
 
 		JPanel mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);

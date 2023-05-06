@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import dao.NhanVien_DAO;
 import entity.NhanVien;
-import ui.panels.PanelThree;
+import ui.panels.PanelThongKe;
 
 public class GUI_QuanLy extends JFrame implements ActionListener {
 	private final JPanel panelTwo = new JPanel();
@@ -69,7 +69,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-
+		setIconImage(new ImageIcon(GUI_NhanVien.class.getResource("/images/hotels-icon.png")).getImage());
 		getContentPane().setLayout(null);
 
 		JPanel leftPanel = new JPanel();
@@ -152,7 +152,7 @@ public class GUI_QuanLy extends JFrame implements ActionListener {
 		// Create table
 		createTable();
 
-		JPanel panelThree = new PanelThree();
+		JPanel panelThree = new PanelThongKe();
 		contentPanel.setLayout(null);
 
 		panelTwo.setBounds(0, 0, 925, 569);

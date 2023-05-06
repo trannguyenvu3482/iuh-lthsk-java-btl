@@ -85,6 +85,7 @@ public class GUI_NhanVien extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		setIconImage(new ImageIcon(GUI_NhanVien.class.getResource("/images/hotels-icon.png")).getImage());
 
 		this.currentMaNV = maNV;
 
